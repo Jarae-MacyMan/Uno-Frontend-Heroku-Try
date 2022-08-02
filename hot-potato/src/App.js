@@ -1,5 +1,9 @@
-
 import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './pages/login'
+import SignUp from './pages/signup';
+
 import io from 'socket.io-client'
 import {useEffect,useState} from 'react'
 
@@ -29,6 +33,13 @@ socket.on('received_message', (data)=>{
 },[socket])
 
   return (
+    <Router>
+      <Routes>
+        <Route exact path='/' element={<SignUp></SignUp>}/>
+        <Route exact path='/login' element={<Login></Login>}/>
+      </Routes>
+    </Router>
+    
     <div className="App">
       <header>
         Hot Potato
@@ -38,7 +49,6 @@ socket.on('received_message', (data)=>{
         setRoom(event.target.value)
       }}></input>
 <button onClick={joinRoom}>Join Room</button>
-
 
       <input placeholder='Message...' 
       onChange={(event)=>{
