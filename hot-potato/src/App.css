@@ -2,37 +2,68 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.map-selection-container{
+  width: 80%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin: auto;
 }
 
-.App-link {
-  color: #61dafb;
+.map-image{
+  width: 70%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.game-card {
+  width: 50%;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+  background-color:darkslategray;
+}
+
+.margin {
+  padding: 5%;
+} 
+
+.btn {
+  height: 5%;
+  margin-top: 5%;
+}
+
+.btn:hover {
+  color: green;
+  border: 2.5px green solid;
+}
+
+.start-page-container { 
+  margin: auto;
+  width: 50%;
+  margin-top: 10%;
+}
+
+.title {
+  text-align: center;
+}
+
+.btn-div {
+  width: fit-content;
+  margin: auto;
+  margin-bottom: 5%;
+}
+
+.map-container{
+  text-align: center;
+}
+
+.map-container:hover {
+  border: 3px green solid;
+}
+
+.create-btn:hover {
+  color: green;
+  cursor: pointer;
+}
+
+.create-btn-div {
+  text-align: center;
+  margin-top: 5%;
 }
