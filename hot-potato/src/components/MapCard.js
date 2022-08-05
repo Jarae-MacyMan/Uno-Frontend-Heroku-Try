@@ -13,7 +13,7 @@ function MapCard(props){
     }, [])
 
     return (
-        <div>
+        <div className="map-container">
             <div>
                 <img alt="oh no!" src={map.map_img} className="map-image"></img>
             </div>

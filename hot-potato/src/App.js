@@ -13,7 +13,7 @@ function App() {
     <Router>
       <Routes>
         <Route exact path='/socket' element={<SocketTest></SocketTest>}/>
-        <Route exact path='/start' element={<Start></Start>} />
+        <Route exact path='/' element={<Start></Start>} />
         <Route exact path='/signup' element={<SignUp></SignUp>}/>
         <Route exact path='/login' element={<Login></Login>}/>
         <Route exact path='/create' element={<CreateGame></CreateGame>}/>

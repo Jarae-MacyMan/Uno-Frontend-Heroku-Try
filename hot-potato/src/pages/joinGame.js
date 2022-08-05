@@ -1,12 +1,17 @@
 import GameList from "../components/GameList";
-import { useParams, useNavigate, Link } from "react-router";
+import { useNavigate } from "react-router";
 
 function JoinGame(){
     const navigate = useNavigate()
     return (
         <div>
-            <button onClick={() => navigate('/start')}>Go Back</button>
+            <button onClick={() => navigate('/')}>Go Back</button>
             <h1>Select a game to join:</h1>
+            <div className="game-card">
+                <div><h3>Map</h3></div>
+                <div><h3>Name</h3></div>
+                <div><h3>Status</h3></div>
+            </div>
             <div><GameList/></div>
         </div>
     )

@@ -3,16 +3,21 @@
 }
 
 .map-selection-container{
+  width: 80%;
   display: flex;
+  margin: auto;
 }
 
 .map-image{
-  width: 50%;
+  width: 70%;
 }
 
 .game-card {
+  width: 50%;
+  margin: auto;
   display: flex;
-  background-color:antiquewhite;
+  justify-content: space-around;
+  background-color:darkslategray;
 }
 
 .margin {
@@ -21,5 +26,44 @@
 
 .btn {
   height: 5%;
+  margin-top: 5%;
+}
+
+.btn:hover {
+  color: green;
+  border: 2.5px green solid;
+}
+
+.start-page-container { 
+  margin: auto;
+  width: 50%;
+  margin-top: 10%;
+}
+
+.title {
+  text-align: center;
+}
+
+.btn-div {
+  width: fit-content;
+  margin: auto;
+  margin-bottom: 5%;
+}
+
+.map-container{
+  text-align: center;
+}
+
+.map-container:hover {
+  border: 3px green solid;
+}
+
+.create-btn:hover {
+  color: green;
+  cursor: pointer;
+}
+
+.create-btn-div {
+  text-align: center;
   margin-top: 5%;
 }
