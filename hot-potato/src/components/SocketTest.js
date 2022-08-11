@@ -1,48 +1,66 @@
 import io from 'socket.io-client';
-import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
-const socket = io.connect('http://localhost:3002')
+
 
 function SocketTest(){
-//room state
-const [room, setRoom ] = useState('')
-//messgage states
-const [message, setMessage] = useState('')
-const [messageReceived, setMessageReceived] = useState('')
+     let playerNum = 0
+ const [gameCode, setGameCode] = useState('')   
+const socket = io('http://localhost:3002')
 
-function joinRoom(){
-    if(room !== ''){
-    socket.emit('join_room', room)
-    }
+socket.on('init', handleInit)
+socket.on('gameCode', handleGameCode)
+socket.on('unknownGame', handleUnknownGame)
+socket.on('tooManyPlayers', handleTooManyPlayers)
+
+
+function reset(){
+    playerNum = null 
+   setGameCode('')
 }
-
-function sendMessage(){
-    socket.emit('send_message',{message, room})
+function handleUnknownGame(){
+    reset()
+alert('Unknown Game Code ')
 }
+function handleTooManyPlayers(){
+     reset()
+    alert('This game is full')
+}
+function handleInit(number){
+  playerNum = number
+}
+function newGame(){
+socket.emit('newgame')
 
-useEffect(() => {
-    socket.on('received_message', (data)=>{
-    setMessageReceived(data.message)
-})
-},[socket])
 
+}
+ function joinGame(){
+socket.emit('joinGame', gameCode)
+
+ }
+ function handleGameCode(gameCode){
+    console.log(gameCode)
+return (
+    <div>
+        <h4>Your game code is: {gameCode}</h4>
+    </div>
+)
+ }
 return (
     <div>
     <header>Hot Potato</header>
-    <input placeholder='Room Number..' 
-        onChange={(event)=>{
-            setRoom(event.target.value)
-        }}>
+   <button onClick={newGame}>Create new game</button>
+   <br></br>
+    <input placeholder='Enter room code...' 
+    onChange={(event)=> {
+        setGameCode(event.target.value)
+    }}>
     </input>
-    <button onClick={joinRoom}>Join Room</button>
-    <input placeholder='Message...' 
-        onChange={(event)=>{
-            setMessage(event.target.value)
-        }}>
-    </input>
-    <button onClick={sendMessage}>click me</button>
-    <h1>Message:{messageReceived}</h1>
+   <button onClick={()=> {
+    joinGame()
+    handleGameCode()
+   }} >Join Room</button>
+  
     </div>
     )
 }

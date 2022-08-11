@@ -8,6 +8,8 @@
 //const { update } = require("lodash");
 
 // let game = new Phaser.Game(config);
+function Game (){
+
 
 var config = {
   type: Phaser.AUTO,
@@ -346,5 +348,6 @@ function update(){
   text.setText(output);
 
 }
-
+}
+export default Game
 

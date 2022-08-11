@@ -7,6 +7,7 @@ import CreateGame from './pages/createGame';
 import JoinGame from './pages/joinGame';
 import SocketTest from './components/SocketTest';
 import Start from './pages/start';
+import Game from './game'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route exact path='/login' element={<Login></Login>}/>
         <Route exact path='/create' element={<CreateGame></CreateGame>}/>
         <Route exact path='/join' element={<JoinGame></JoinGame>}/>
+         <Route exact path='/game' element={<Game></Game>}/>
       </Routes>
     </Router>
   );

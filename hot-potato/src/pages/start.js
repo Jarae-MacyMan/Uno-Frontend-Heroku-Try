@@ -9,6 +9,7 @@ function Start(){
             <div className="btn-div"><button className="start-btn" onClick={() => navigate('/join')}>Join a game</button></div>
             <br></br>
             <div className="btn-div"><button className="start-btn" onClick={() => navigate('/socket')}>Test Socket.io</button></div>
+            <div className="btn-div"><button className="start-btn" onClick={() => navigate('/game')}>Test Game</button></div>
         </div>
     )
 }
