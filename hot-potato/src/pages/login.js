@@ -3,6 +3,7 @@ import Context from '../context/Context';
 import React from 'react';
 
 function Login(){
+
     const [playerInfo, setPlayerInfo] = React.useState({});
     const context = React.useContext(Context);
 
@@ -30,20 +31,21 @@ function Login(){
         return data;
     }
 
-    React.useEffect(() => {
+    React.useEffect((context) => {
         loginAttempt(playerInfo).then(data => {
             context.updateToken(data.token)
             context.updateVerifiedPlayer(data)
         })
     }, [playerInfo])
 
-    React.useEffect(() => {
+    React.useEffect((context) => {
         console.log(context.token);
         console.log(context.VerifiedPlayer)
     }, [context.token])
 
     return (
         <div>
+      
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <div>
