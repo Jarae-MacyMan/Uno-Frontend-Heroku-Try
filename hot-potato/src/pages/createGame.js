@@ -1,5 +1,5 @@
 import MapList from "../components/MapList";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 function CreateGame(){
     const navigate = useNavigate()
@@ -17,7 +17,8 @@ function CreateGame(){
     }
 
     return (
-        <div>
+   
+        <div>     
             <button onClick={() => navigate('/')}>Go back</button>
             <h1>Choose a Map</h1>
             <div><MapList/></div>

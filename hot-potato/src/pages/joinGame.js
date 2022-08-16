@@ -5,6 +5,8 @@ function JoinGame(){
     const navigate = useNavigate()
     return (
         <div>
+           
+
             <button onClick={() => navigate('/')}>Go Back</button>
             <h1>Select a game to join:</h1>
             <div className="game-card">
