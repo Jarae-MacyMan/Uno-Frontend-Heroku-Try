@@ -1,4 +1,4 @@
-import GameCard from "./gameCard";
+import GameCard from "./GameCard";
 import { useContext } from "react";
 import Context from "../context/Context";
 
