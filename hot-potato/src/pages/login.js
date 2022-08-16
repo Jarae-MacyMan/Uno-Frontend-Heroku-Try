@@ -45,7 +45,6 @@ function Login(){
 
     return (
         <div>
-      
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -59,7 +58,7 @@ function Login(){
                 <button type='submit'> Submit </button>
             </form>
             <span>
-                <Link to="/" >SignUp</Link>
+                <Link to="/signup" >SignUp</Link>
             </span>
         </div>
     )

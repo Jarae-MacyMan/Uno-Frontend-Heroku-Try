@@ -12,7 +12,7 @@ import '../style/navbar.css'
 function NavbarFunc(props){
    
 
-console.log(props)
+console.log(`This is props: ${props}`)
 
   const [isOpen, setIsOpen] = useState(false);
 
