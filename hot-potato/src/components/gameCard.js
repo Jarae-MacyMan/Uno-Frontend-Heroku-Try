@@ -1,5 +1,4 @@
-import {useState, useEffect, props} from  'react'
-import{Link} from 'react-router-dom'
+
 
 
 function GameCard(){
@@ -23,4 +22,3 @@ function GameCard(){
         </div>
     )
 }
-export default GameCard
