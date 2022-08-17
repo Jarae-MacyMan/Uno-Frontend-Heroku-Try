@@ -31,14 +31,14 @@ function Login(){
         return data;
     }
 
-    React.useEffect((context) => {
+    React.useEffect(() => {
         loginAttempt(playerInfo).then(data => {
             context.updateToken(data.token)
             context.updateVerifiedPlayer(data)
         })
     }, [playerInfo])
 
-    React.useEffect((context) => {
+    React.useEffect(() => {
         console.log(context.token);
         console.log(context.VerifiedPlayer)
     }, [context.token])
