@@ -58,7 +58,8 @@ function Login(){
                 <button type='submit'> Submit </button>
             </form>
             <span>
-                <Link to="/signup" >SignUp</Link>
+                <Link to="/signup">SignUp</Link>
+                <Link to="/home">Home</Link>
             </span>
         </div>
     )
