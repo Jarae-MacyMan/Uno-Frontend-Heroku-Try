@@ -19,7 +19,7 @@ function App() {
         {/* <Route exact path='/create' element={<CreateGame></CreateGame>}/> */}
         {/* <Route exact path='/game' element={<Game></Game>}/> */}
         <Route exact path='/home' element={<Lobby></Lobby>}/> 
-        <Route path='room/:id' element={<WaitingRoom></WaitingRoom>}/>
+        <Route path='Waiting-Room/:id' element={<WaitingRoom></WaitingRoom>}/>
       </Routes>
     </Router>
   );
