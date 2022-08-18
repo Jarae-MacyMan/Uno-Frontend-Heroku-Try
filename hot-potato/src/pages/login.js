@@ -60,6 +60,7 @@ function Login(){
             <span>
                 <Link to="/signup">SignUp</Link>
                 <Link to="/home">Home</Link>
+                <Link to="Waiting-Room/194">Waiting Room 194</Link>
             </span>
         </div>
     )

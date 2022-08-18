@@ -5,7 +5,7 @@ import Context from "../context/Context";
 function WaitingRoom (){
     let params = useParams();
     const context = useContext(Context)
-
+    
     const [ game, updateCurrentGame ] = useState([])
     const [ currentPlayerList, setPlayerList ] = useState([])
     const [ enteredInfo, setEnteredInfo ] = useState({})
