@@ -6,10 +6,7 @@ import '../style/signup.css'
 import NavbarFunc from './navbar';
 function SignUp(){
     const navigate = useNavigate()
-    const [playerInfo, setPlayerInfo] = React.useState({
-        username : '',
-        password : ''
-    })
+    const [playerInfo, setPlayerInfo] = React.useState({})
    
     const context = React.useContext(Context);
 
@@ -19,16 +16,21 @@ function SignUp(){
         const playerPassword = event.target.password.value;
         // console.log(playerUsername, playerPassword)
 
-        setPlayerInfo()
-        console.log(playerInfo)
+        setPlayerInfo(
+         {
+          username: playerUsername,
+          password: playerPassword
+         }
+        )
+      
     }
-    const handleChange = (event) =>{
-event.preventDefault()
-setPlayerInfo({
-    ...playerInfo,
-    [event.target.name]: event.target.value
-})
-    }
+//     const handleChange = (event) =>{
+// event.preventDefault()
+// setPlayerInfo({
+//     ...playerInfo,
+//     [event.target.name]: event.target.value
+// })
+    // }
 
     const createNewPlayer = async (playerData) => {
         const response = await fetch("http://localhost:3032/signup", {
@@ -85,7 +87,7 @@ setPlayerInfo({
       
     </Label>
     <Input
-    onChange={handleChange}
+    
       id="exampleEmail"
       name="username"
       placeholder="Entet your username"
@@ -102,7 +104,7 @@ setPlayerInfo({
       Password
     </Label>
     <Input
-     onChange={handleChange}
+ 
       id="examplePassword"
       name="password"
       placeholder="don't tell!"
@@ -114,15 +116,14 @@ setPlayerInfo({
       <Link to="/login" className='link'>Login</Link>
   </p>
  </div>
-  <Button type='submit' onClick={(()=>{
-   
-    navigate('/home')
- 
-  })}>
+  <Button type='submit'>
     
     Submit
   </Button>
 </Form> 
+<Button onClick={(()=>{
+  navigate('/home')
+})}>Home page</Button>
 {/* <NavbarFunc user={playerInfo}/> */}
 </body>
             </div>
