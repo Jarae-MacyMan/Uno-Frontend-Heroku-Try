@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router";
 import Context from "../context/Context";
@@ -64,6 +65,7 @@ function WaitingRoom (){
         makeGamePublic(makePublicInfo)
     }, [makePublicInfo])
 
+
     return(
         <div>
             <p>Players in the Lobby: {params.id} </p>
@@ -84,5 +86,6 @@ function WaitingRoom (){
         </div>
     )
 }
+
 
 export default WaitingRoom;

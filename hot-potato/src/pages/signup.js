@@ -8,6 +8,7 @@ import NavbarFunc from './navbar';
 function SignUp(){
   const navigate = useNavigate()
   const [playerInfo, setPlayerInfo] = React.useState({})
+
    
   const context = React.useContext(Context);
 
@@ -15,12 +16,12 @@ function SignUp(){
     event.preventDefault();
     const playerUsername = event.target.username.value;
     const playerPassword = event.target.password.value;
-
     setPlayerInfo({
       username : playerUsername,
       password : playerPassword
       })
     }
+    
   const createNewPlayer = async (playerData) => {
     const response = await fetch("http://localhost:3032/signup", {
       method: "POST",

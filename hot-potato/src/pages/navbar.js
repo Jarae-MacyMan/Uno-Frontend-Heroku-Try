@@ -1,10 +1,21 @@
+
     import React, { useState, useContext} from 'react';
 import { Navbar, NavbarToggler, NavbarBrand, NavbarText } from 'reactstrap';
+import {
+Modal,
+  Navbar,
+  NavbarBrand,
+Button,
+  NavbarText,
+  ModalBody,ModalFooter,ModalHeader, Input
+} from 'reactstrap';
+
 import '../style/navbar.css'
 import Context from "../context/Context"
 
-function NavbarFunc(props){
-   
+
+
+function NavbarFunc(){
   console.log(`This is props: ${props}`)
 
   const [isOpen, setIsOpen] = useState(false);
@@ -14,11 +25,9 @@ function NavbarFunc(props){
   return (
     <div>
       <Navbar className='navbar-container'>
-        <NavbarBrand href="/">HOT POTATO</NavbarBrand>
+        <NavbarBrand href="/home">HOT POTATO </NavbarBrand>
         <NavbarToggler onClick={toggle} />
-      
-          <NavbarText>Welcome {context.verifiedPlayer.playerInfo.username}</NavbarText>
-    
+          <NavbarText>Welcome {context.verifiedPlayer.playerInfo.username}</NavbarText> 
       </Navbar>
     </div>
   );

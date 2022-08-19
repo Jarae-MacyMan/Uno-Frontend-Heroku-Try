@@ -1,5 +1,6 @@
 .navbar-container{
     background-color: aliceblue;
     width: 100vw;
+    height: 90px;
     position:fixed;
 }
