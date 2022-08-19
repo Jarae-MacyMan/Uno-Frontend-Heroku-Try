@@ -1,6 +1,7 @@
 import NavbarFunc from "./navbar"
 import '../style/lobby.css'
-import MapCard from "../components/MapCard"
+
+import MapList from "../components/MapList"
 function Lobby(){
 
 return(
@@ -18,7 +19,7 @@ return(
         </p> 
         </div>
         {/* <MapList/> */}
-        <MapCard/>
+        <MapList/>
         </div>
     
 
