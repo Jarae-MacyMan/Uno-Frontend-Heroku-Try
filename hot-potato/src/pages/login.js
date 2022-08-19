@@ -31,21 +31,20 @@ function Login(){
         return data;
     }
 
-    React.useEffect((context) => {
+    React.useEffect(() => {
         loginAttempt(playerInfo).then(data => {
             context.updateToken(data.token)
             context.updateVerifiedPlayer(data)
         })
     }, [playerInfo])
 
-    React.useEffect((context) => {
+    React.useEffect(() => {
         console.log(context.token);
         console.log(context.VerifiedPlayer)
     }, [context.token])
 
     return (
         <div>
-      
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -59,7 +58,9 @@ function Login(){
                 <button type='submit'> Submit </button>
             </form>
             <span>
-                <Link to="/" >SignUp</Link>
+                <Link to="/signup">SignUp</Link>
+                <Link to="/home">Home</Link>
+                <Link to="Waiting-Room/194">Waiting Room 194</Link>
             </span>
         </div>
     )

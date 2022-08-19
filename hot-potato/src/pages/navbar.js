@@ -1,4 +1,6 @@
-    import React, { useState } from 'react';
+
+    import React, { useState, useContext} from 'react';
+import { Navbar, NavbarToggler, NavbarBrand, NavbarText } from 'reactstrap';
 import {
 Modal,
   Navbar,
@@ -8,68 +10,24 @@ Button,
   ModalBody,ModalFooter,ModalHeader, Input
 } from 'reactstrap';
 
-
 import '../style/navbar.css'
+import Context from "../context/Context"
 
 
 
 function NavbarFunc(){
-   
+  console.log(`This is props: ${props}`)
 
-
-
-  
-  const [modal, setModal] = useState(false);
-
-const [code, setCode] = useState('')
-const codeObj = {}
-
-
-  const toggle = () => setModal(!modal);
-
- 
- console.log(codeObj)
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isOpen);
+  const context = useContext(Context)
 
   return (
     <div>
       <Navbar className='navbar-container'>
         <NavbarBrand href="/home">HOT POTATO </NavbarBrand>
-        <NavbarText onClick={toggle}>Room Chat</NavbarText>
-        <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Send Your Room Code</ModalHeader>
-        <ModalBody>
-          <ul>
-            
-            <li></li>
-          </ul>
-      
-        </ModalBody>
-        <ModalFooter>
-          <form onClick={((e)=>{
-            e.preventDefault()
-            setCode(e.target.value)
-            console.log(code)
-          })}>
-          <Input type='submit'
-          style={{width:'200px'}} placeholder='Room Code'
-         ></Input>
-          <Button color="primary"  
-
-        >
-           Send
-          </Button>{' '} 
-            </form>
-          <Button color="secondary" onClick={toggle} >
-           Exit
-          </Button>
-       
-        </ModalFooter>
-      </Modal>
-
-
-
-          <NavbarText>Welcome player</NavbarText>
-    
+        <NavbarToggler onClick={toggle} />
+          <NavbarText>Welcome {context.verifiedPlayer.playerInfo.username}</NavbarText> 
       </Navbar>
     </div>
   );

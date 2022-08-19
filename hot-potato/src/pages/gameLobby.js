@@ -1,62 +1,90 @@
-import NavbarFunc from "./navbar";
-import MapCard from "../components/MapCard";
-import '../style/waitingRoom.css'
-import { useEffect, useState } from "react";
-import {ListGroup,ListGroupItem, ListGroupItemHeading} from 'reactstrap'
+
+import { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router";
+import Context from "../context/Context";
 
 function WaitingRoom (){
-    const [roomCode , setRoomCode] = useState('')
- 
-        useEffect(()=>{
-            let code = ""
-            const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-            const charactersLength = characters.length;
-        
-            for(let i=0; i<6;i++){
-                code += characters.charAt(Math.floor(Math.random() * charactersLength))
-            setRoomCode(code)
-            }
-        },[])
-            ``
+    let params = useParams();
+    const context = useContext(Context)
+    
+    const [ game, updateCurrentGame ] = useState([])
+    const [ currentPlayerList, setPlayerList ] = useState([])
+    const [ enteredInfo, setEnteredInfo ] = useState({})
+    const [ isClicked, setIsClicked ] = useState('true')
+    const [ makePublicInfo, setMakePublicInfo ] = useState([])
 
-console.log(roomCode)
-return(
-    
-<div>
-   
-<NavbarFunc/>
-<div className="heading">
-       <h2 className="heading2"> 
-        WAITING ROOM
-      </h2>
-       
-        <p className="text">
-      Send the given code in the forum to allow others players to join your game!!!
-        </p> 
-<h3 className="code-text">Your game code is: {roomCode} </h3>
-        </div> 
-        
-<div className="main-container">
-    
-<div className="waiting-img">
-        <img src="https://sagamer.co.za/wp-content/uploads/2015/03/loading-please-wait.png"></img> 
+    useEffect(() => {
+        context.getAllGames().then(gamesList => {
+            updateCurrentGame(gamesList.find(games => games.game_id == params.id))
+        })
+    }, [context.gamesList])
+
+    useEffect(() => {
+        fetch(`http://localhost:3032/games/${params.id}/players`)
+        .then(res => res.json())
+        .then((data) => {
+            //mapping over the data make another fetch call to get the player username set the playerlist
+            data.playerList.map((info) => {
+                fetch(`http://localhost:3032/games/${info.game_id}/players/playernames`)
+                .then(res => res.json())
+                .then((newData) => {
+                    setPlayerList(newData.playerList)
+                })
+            })
+        })
+    }, [currentPlayerList])
+
+    const handleClick = event => {
+        const player = context.verifiedPlayer.playerInfo.player_id;
+        setEnteredInfo({
+            player_id: player
+        })
+    }
+
+    const handlePublicClick = event => {
+        setIsClicked(!isClicked)
+        const gameId = params.id;
+        setMakePublicInfo({
+            game_id : gameId
+        })
+    }
+
+    const makeGamePublic = async (makePublicInfo) => {
+        const response = await fetch(`http://localhost:3032/game/${params.id}/public`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type" : "application/json",
+            },
+            body: JSON.stringify(makePublicInfo)
+        })
+        const data = await response.json()
+        return data;
+    }
+
+    useEffect(() => {
+        makeGamePublic(makePublicInfo)
+    }, [makePublicInfo])
+
+
+    return(
+        <div>
+            <p>Players in the Lobby: {params.id} </p>
+            <div>
+                {currentPlayerList.map((player) => {
+                    return <p key={player.player_id}>{player.username}</p>
+                })}
+            </div>
+            <div>
+                {game.hosted_by === context.verifiedPlayer.playerInfo.username && 
+                    <div>
+                        <button>Start</button>
+                        <button onClick={handlePublicClick}>{isClicked ? 'Private' : 'Public'}</button>
+                    </div>
+                }
+            </div>
+            <button onClick={handleClick}>Leave Room</button>
         </div>
-
-</div>
-<div className="friend-list">
-  <h3>Players</h3>
-<ol>
-  <li>khalia</li>
-  <li>Liam</li>
-  <li>Jarae</li>
-  <li>khalia</li>
-</ol>
-<button className="start-btn"> Start Game</button>
-</div>
-
-</div>
-)
-
+    )
 }
 
 
