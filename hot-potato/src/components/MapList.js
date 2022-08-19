@@ -51,9 +51,7 @@ return (
       </CardActionArea>
       <CardActions> 
         <Button className='start-btn' style={{color: 'black'}} onClick= {(()=>{
-          navigate('/room')
           return( <MapCard key={map.map_id} map={map}/>)
-     
         })}
         > Create game {map.map_id}</Button>
   
