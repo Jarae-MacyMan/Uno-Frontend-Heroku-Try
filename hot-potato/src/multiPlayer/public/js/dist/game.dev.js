@@ -21,7 +21,10 @@ var config = {
   }
 };
 var touchPo = false;
-var playerSpeed = 100; //let redScoreText
+var playerSpeed = 150;
+var getPo = true;
+var text;
+var timedEvent; //let redScoreText
 
 var game = new Phaser.Game(config);
 
@@ -37,7 +40,7 @@ function preload() {
 }
 
 function create() {
-  this.add.image(700, 300, 'sky').setScale(2);
+  //this.add.image(700, 300, 'sky').setScale(2);
   var self = this;
   this.socket = io();
   this.otherPlayers = this.physics.add.group();
@@ -106,20 +109,31 @@ function create() {
     self.redScoreText.setText('Red: ' + scores.red); // self.blueScoreText.setText('Green: ' + scores.green);
     // self.redScoreText.setText('Yellow: ' + scores.yellow);
   }); // //  star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-  // this.socket.on('potatoLocation', function (potatoLocation) {
-  //     if (self.potato) self.potato.destroy();
-  //     self.potato = self.physics.add.image(potatoLocation.x, potatoLocation.y, 'potato');
-  //     self.physics.add.overlap(self.ship, self.potato, function () {
-  //       this.socket.emit('potatoCollected');
-  //     }, null, self);
-  //   });
+
+  this.socket.on('potatoLocation', function (potatoLocation) {
+    if (self.potato) self.potato.destroy();
+    self.potato = self.physics.add.image(potatoLocation.x, potatoLocation.y, 'potato').setScale(.2);
+    self.physics.add.overlap(self.ship, self.potato, function () {
+      this.socket.emit('potatoCollected');
+      playerSpeed = 600;
+      touchPo = true;
+      text = this.add.text(32, 32);
+      timedEvent = this.time.addEvent({
+        delay: 5000,
+        callbackScope: this
+      }); //console.log(playerSpeed)
+      // timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
+      // this.time.addEvent(timedEvent);
+      //timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
+    }, null, self);
+  }); //timedEvent = this.time.delayedCall(3000, onEvent, [], this);
   // stars = this.physics.add.group({
   //   key: 'star',
   //   repeat: 20,
   //   setXY: { x: 12, y: 0, stepX: 70 }
   // });
-
-  potato = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650 - 0 + 1) + 0), 'potato').setScale(.2); //potato.body.setGravityY(300)
+  //potato = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650- 0 + 1) + 0), 'potato').setScale(.2)
+  //potato.body.setGravityY(300)
   //this.physics.add.collider(potato, platforms);
 
   sandwich = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650 - 0 + 1) + 0), 'sandwich').setScale(.09);
@@ -127,26 +141,42 @@ function create() {
   this.physics.add.overlap(self, sandwich, hitSandwich, null, this);
 
   function hitSandwich(self, sandwich) {
-    sandwich.disableBody(true, true);
-    playerSpeed = 500; //gameOver = true;
-  }
+    sandwich.disableBody(true, true); //playerSpeed = 500
+    //console.log(playerSpeed)
+    //gameOver = true;
+  } // timedEvent = this.time.addEvent({ delay: 2000, callback: onEvent, callbackScope: this });
+  //  The same as above, but uses a method signature to declare it (shorter, and compatible with GSAP syntax)
+  //timedEvent = this.time.delayedCall(3000,  [], this);
+  // text = this.add.text(32, 32);
+  // timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
+  // this.time.addEvent(timedEvent);
+  // if(touchPo == true){
+  //   text = this.add.text(32, 32);
+  //   timedEvent = this.time.addEvent({ delay: 2000,  callbackScope: this });
+  // }
+
 }
 
 function update() {
   if (this.ship) {
     if (this.cursors.left.isDown) {
-      this.ship.setAngularVelocity(-150);
+      this.ship.setVelocityX(-playerSpeed);
+      console.log(playerSpeed); //this.ship.setAngularVelocity(-150);
     } else if (this.cursors.right.isDown) {
-      this.ship.setAngularVelocity(150);
+      this.ship.setVelocityX(playerSpeed); //this.ship.setAngularVelocity(150);
+    } else if (this.cursors.down.isDown) {
+      this.ship.setVelocityY(playerSpeed);
+    } else if (this.cursors.up.isDown) {
+      this.ship.setVelocityY(-playerSpeed);
     } else {
-      this.ship.setAngularVelocity(0);
-    }
+      this.ship.setVelocityX(0);
+      this.ship.setVelocityY(0);
+    } // if (this.cursors.up.isDown) {
+    //   this.physics.velocityFromRotation(this.ship.rotation + 1.5, playerSpeed, this.ship.body.acceleration);
+    // } else {
+    //   this.ship.setAcceleration(0);
+    // }
 
-    if (this.cursors.up.isDown) {
-      this.physics.velocityFromRotation(this.ship.rotation + 1.5, playerSpeed, this.ship.body.acceleration);
-    } else {
-      this.ship.setAcceleration(0);
-    }
 
     this.physics.world.wrap(this.ship, 5); // emit player movement
 
@@ -169,6 +199,17 @@ function update() {
       rotation: this.ship.rotation
     };
   }
+
+  if (touchPo == true) {
+    text.setText('Event.progress: ' + timedEvent.getProgress().toString().substr(0, 4));
+  } //console.log(text)
+  // var progress = timedEvent.getProgress();
+  // text.setText([
+  //   //'Click to restart the Timer',
+  //   'Event.progress: ' + progress.toString().substr(0, 4)
+  // ]);
+  //console.log(progress += 1)
+
 } // function addStar(self, starLocation) {
 //   self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
 // }
@@ -191,8 +232,8 @@ function addPlayer(self, playerInfo) {
   // }
 
 
-  self.ship.setDrag(100);
-  self.ship.setAngularDrag(100);
+  self.ship.setDrag(1);
+  self.ship.setAngularDrag(1);
   self.ship.setMaxVelocity(200);
 }
 

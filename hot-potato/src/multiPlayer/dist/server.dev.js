@@ -15,12 +15,14 @@ var star = {
 };
 var potato = {
   x: Math.floor(Math.random() * 1350) + 50,
-  y: Math.floor(Math.random() * 700) + 50,
-  touchPo: false
+  y: Math.floor(Math.random() * 700) + 50 //touchPo: false
+
 };
 var scores = {
   blue: 0,
-  red: 0
+  red: 0 //green: 0,
+  //yellow: 0
+
 };
 app.use(express["static"](__dirname + '/public'));
 app.get('/', function (req, res) {
@@ -72,13 +74,16 @@ io.on('connection', function (socket) {
     star.y = Math.floor(Math.random() * 700) + 50;
     io.emit('starLocation', star);
     io.emit('scoreUpdate', scores);
-  }); //   socket.on('potatoCollected', function () {
-  //     potato.touchPo = true
-  //     if(potato.touchPo == true){
-  //         getPotato = true
-  //     }
-  //     io.emit('potatoLocation', potato);
-  //   });
+  });
+  socket.on('potatoCollected', function () {
+    // potato.touchPo = true
+    // if(potato.touchPo == true){
+    //     getPotato = true
+    // }
+    potato.x = Math.floor(Math.random() * 1350) + 50;
+    potato.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('potatoLocation', potato);
+  });
 });
 server.listen(8082, function () {
   console.log("Listening on ".concat(server.address().port));

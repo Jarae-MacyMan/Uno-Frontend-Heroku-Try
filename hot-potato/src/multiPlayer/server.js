@@ -8,19 +8,22 @@ var players = {};
 var star = {
     x: Math.floor(Math.random() * 1350) + 50,
     y: Math.floor(Math.random() * 700) + 50
-  };
+};
 
 var potato = {
     x: Math.floor(Math.random() * 1350) + 50,
-    y: Math.floor(Math.random() * 700) + 50,
-    touchPo: false
+    y: Math.floor(Math.random() * 700) + 50
+    //touchPo: false
 
 };
   
   
 var scores = {
     blue: 0,
-    red: 0
+    red: 0,
+    //green: 0,
+    //yellow: 0
+
   };
 
 app.use(express.static(__dirname + '/public'));
@@ -81,15 +84,17 @@ io.on('connection', function (socket) {
     io.emit('scoreUpdate', scores);
   });
 
-//   socket.on('potatoCollected', function () {
-//     potato.touchPo = true
-//     if(potato.touchPo == true){
-//         getPotato = true
-//     }
-//     io.emit('potatoLocation', potato);
+  socket.on('potatoCollected', function () {
+    // potato.touchPo = true
+    // if(potato.touchPo == true){
+    //     getPotato = true
+    // }
+    potato.x = Math.floor(Math.random() * 1350) + 50;
+    potato.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('potatoLocation', potato);
 
     
-//   });
+  });
 
 
 });
