@@ -16,7 +16,7 @@ function NavbarFunc(props){
       <Navbar className='navbar-container'>
         <NavbarBrand href="/home">HOT POTATO </NavbarBrand>
         <NavbarToggler onClick={toggle} />
-          <NavbarText>Welcome {context.verifiedPlayer.playerInfo.username}</NavbarText> 
+          <NavbarText>Welcome {context.userInfo.playerInfo.username}</NavbarText> 
       </Navbar>
     </div>
   );

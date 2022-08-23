@@ -9,6 +9,8 @@ function ContextProvider({children}){
     const [ token, updateToken ] = useState("")
     const [ verifiedPlayer, updateVerifiedPlayer ] = useState({})
 
+    const [userInfo, updateUserInfo] = useState({});
+
     const getAllPlayers = async() => {
         const res = await fetch("http://localhost:3032/players")
         const data = await res.json();
@@ -58,7 +60,9 @@ function ContextProvider({children}){
         token,
         updateToken, 
         verifiedPlayer,
-        updateVerifiedPlayer
+        updateVerifiedPlayer, 
+        userInfo, 
+        updateUserInfo
     }
 
     return (

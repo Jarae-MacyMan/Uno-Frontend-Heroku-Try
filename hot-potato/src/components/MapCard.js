@@ -14,6 +14,9 @@ import Context from '../context/Context';
 function MapCard(props){
   let navigate = useNavigate()
   const [ gameInfo, setGameInfo ] = useState({})
+  const [ joinGameInfo, setJoinGameInfo ] = useState({})
+  let [ joinAttempts, updateJoinAttempts ] = useState(0)
+  
   const context = useContext(Context)
 
   const generateCode = event => {
@@ -31,8 +34,8 @@ function MapCard(props){
   const handleSubmit = event => {
     event.preventDefault();
     const mapId = 1
-    const hostedBy = context.verifiedPlayer.playerInfo.username
-    const hostId = context.verifiedPlayer.playerInfo.player_id
+    const hostedBy = context.userInfo.playerInfo.username
+    const hostId = context.userInfo.playerInfo.player_id
     let roomCode = generateCode()
     console.log(mapId, hostedBy, hostId, roomCode)
     setGameInfo({
@@ -45,7 +48,14 @@ function MapCard(props){
 
   const handleSubmitJoin = event => {
     event.preventDefault();
-  
+    let roomCode = event.target.code.value
+    const playerId = context.userInfo.playerInfo.player_id
+    console.log(roomCode, playerId)
+    setJoinGameInfo({
+      room_code : roomCode,
+      player_id : playerId
+    })
+    updateJoinAttempts(joinAttempts += 1)
   }
 
   const createGame = async (gameData) => {
@@ -61,11 +71,37 @@ function MapCard(props){
     return data
   }
 
+  const joinGame = async (joinGameInfo) => {
+    const response = await fetch("http://localhost:3032/join", {
+      method: "POST",
+      headers: {
+        "Content-Type" : "application/json",
+      },
+      body : JSON.stringify(joinGameInfo)
+    })
+    const data = await response.json();
+    console.log(data)
+    return data
+  }
+
   useEffect(() => {
-    createGame(gameInfo).then(newGameData => {
-      console.log(`Game info: ${newGameData}`)
+    createGame(gameInfo).then(data => {
+      console.log(gameInfo)
+      console.log(data)
+      if('game' in data){
+        navigate(`/Waiting-Room/${data.game[0].game_id}`)
+      }
     })
   }, [gameInfo])
+
+  useEffect(() => {
+    joinGame(joinGameInfo).then(data => {
+      console.log(data.data.game_id)
+      if('data' in data){
+        navigate(`/Waiting-Room/${data.data.game_id}`)
+      }
+    })
+  })
 
   return (
     <div>
@@ -87,7 +123,7 @@ function MapCard(props){
             <form onSubmit={handleSubmitJoin}>
             <FormControl>
               <InputLabel>Room code</InputLabel>
-              <Input className='id'/>
+              <Input className='id' type='text' id='code'/>
               <Button style={{color: 'black'}}className='join' size="small" color="primary" type='submit'>JOIN</Button>
             </FormControl>
             </form>
