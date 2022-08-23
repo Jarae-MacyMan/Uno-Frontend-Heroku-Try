@@ -1,22 +1,28 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import Context from '../context/Context';
 import React from 'react';
 
 function Login(){
-
+    const navigate = useNavigate();
     const [playerInfo, setPlayerInfo] = React.useState({});
+    let   [attempts, updateAttempts] = React.useState(0);
+    const [message, setMessage] = React.useState('')
     const context = React.useContext(Context);
+    console.log(context)
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const playerUsername = event.target.username.value;
         const playerPassword = event.target.password.value;
         console.log(playerUsername, playerPassword);
-
-        setPlayerInfo({
+        if(playerUsername){
+            setPlayerInfo({
             username : playerUsername,
             password : playerPassword
-        })
+            })
+        }
+        updateAttempts(attempts += 1)    
     }
 
     const loginAttempt = async(playerData) => {
@@ -28,20 +34,23 @@ function Login(){
             body: JSON.stringify(playerData)
         })
         const data = await response.json()
+        console.log(data)
         return data;
     }
 
     React.useEffect(() => {
-        loginAttempt(playerInfo).then(data => {
-            context.updateToken(data.token)
-            context.updateVerifiedPlayer(data)
-        })
+        if(attempts > 0){
+            loginAttempt(playerInfo).then(data => {
+                if(data.message) {
+                    setMessage(data.message)
+                } else {
+                    setMessage('');
+                    context.updateUserInfo(data)
+                    navigate('/home')
+                }
+            })
+        }
     }, [playerInfo])
-
-    React.useEffect(() => {
-        console.log(context.token);
-        console.log(context.VerifiedPlayer)
-    }, [context.token])
 
     return (
         <div>
