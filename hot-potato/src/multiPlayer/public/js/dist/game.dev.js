@@ -21,14 +21,17 @@ var config = {
   }
 };
 var touchPo = false;
-var touchSandwich = false;
 var playerSpeed = 150;
-var getPo = true;
+var showPotatoText = false;
+var potatoText;
+var potaotTimedEvent;
 var text;
 var timedEvent;
+var touchSandwich = false;
 var sandwichText;
 var sandwichTimedEvent;
 var showSandwichText = false;
+var gotJuice = false;
 var c = 0;
 var s = 0; //let redScoreText
 
@@ -123,27 +126,30 @@ function create() {
     self.physics.add.overlap(self.ship, self.potato, function () {
       this.socket.emit('potatoCollected'); //once secket is receved 
 
-      touchPo = true; //adds text and initiats timer 
+      if (gotJuice == false) {
+        touchPo = true; //adds text and initiats timer 
 
-      text = this.add.text(32, 32);
-      timedEvent = this.time.addEvent({
-        delay: 500,
-        callback: function callback() {
-          return onEvent(self);
-        },
-        callbackScope: this,
-        loop: true
-      }); //console.log(playerSpeed)
+        potatoText = this.add.text(32, 32);
+        potaotTimedEvent = this.time.addEvent({
+          delay: 500,
+          callback: function callback() {
+            return onEvent(self);
+          },
+          callbackScope: this,
+          loop: true
+        });
+      } //console.log(playerSpeed)
       // timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
       // this.time.addEvent(timedEvent);
       //timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
+
     }, null, self);
   }); //sandwich
 
   this.socket.on('sandwichLocation', function (sandwichLocation) {
     if (self.sandwich) self.sandwich.destroy();
     self.sandwich = self.physics.add.image(sandwichLocation.x, sandwichLocation.y, 'sandwich').setScale(.1);
-    self.physics.add.overlap(self.ship, self.sandwich, function () {
+    self.physics.add.collider(self.ship, self.sandwich, function () {
       this.socket.emit('sandwichCollected');
       touchSandwich = true;
       sandwichText = this.add.text(40, 40);
@@ -164,6 +170,7 @@ function create() {
     self.juice = self.physics.add.image(juiceLocation.x, juiceLocation.y, 'juice').setScale(.25);
     self.physics.add.overlap(self.ship, self.juice, function () {
       this.socket.emit('juiceCollected');
+      gotJuice == true;
     }, null, self);
   }); //timedEvent = this.time.delayedCall(3000, onEvent, [], this);
   // stars = this.physics.add.group({
@@ -240,7 +247,12 @@ function update() {
 
 
   if (touchPo == true) {
-    text.setText('Event.progress: ' + timedEvent.getProgress().toString().substr(0, 4));
+    if (showPotatoText == false) {
+      potatoText.setText('Event.progress: ' + potaotTimedEvent.getProgress().toString().substr(0, 4));
+    } else if (showPotatoText == true) {
+      potatoText.destroy();
+      showPotatoText = false;
+    }
   }
 
   if (touchSandwich == true) {
@@ -273,9 +285,10 @@ function onEvent(self) {
   }
 
   if (c === 10) {
-    timedEvent.remove(false);
-    self.ship.setTint(0xff0000);
-    self.physics.pause();
+    potaotTimedEvent.remove(false);
+    showPotatoText = true;
+    self.ship.setTint(0xff0000); //self.physics.pause();
+
     c = 0; //self.socket.emit('sandwichCollected');
   }
 }

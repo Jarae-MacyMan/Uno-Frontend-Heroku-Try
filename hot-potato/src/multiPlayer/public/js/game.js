@@ -18,17 +18,25 @@ var config = {
 };
 
 let touchPo = false
-let touchSandwich = false 
-
 let playerSpeed = 150
-let getPo = true 
+
+let showPotatoText = false 
+let potatoText;
+let potaotTimedEvent;
+
 
 let text;
 let timedEvent;
 
+
+
+let touchSandwich = false 
+
 let sandwichText;
 let sandwichTimedEvent;
 let showSandwichText = false 
+
+let gotJuice = false 
 
 
 var c = 0;
@@ -134,11 +142,12 @@ function create() {
         this.socket.emit('potatoCollected');
         //once secket is receved 
         
-        touchPo = true
-        //adds text and initiats timer 
-        text = this.add.text(32, 32);
-        timedEvent = this.time.addEvent({ delay: 500, callback: () => onEvent(self),  callbackScope: this, loop: true });  
-        //console.log(playerSpeed)
+        if (gotJuice == false){
+          touchPo = true
+          //adds text and initiats timer 
+          potatoText = this.add.text(32, 32);
+          potaotTimedEvent = this.time.addEvent({ delay: 500, callback: () => onEvent(self),  callbackScope: this, loop: true });  
+        }//console.log(playerSpeed)
         // timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
         // this.time.addEvent(timedEvent);
         //timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
@@ -150,7 +159,7 @@ function create() {
     
     if (self.sandwich) self.sandwich.destroy();
     self.sandwich = self.physics.add.image(sandwichLocation.x, sandwichLocation.y, 'sandwich').setScale(.1)
-    self.physics.add.overlap(self.ship, self.sandwich, function () {
+    self.physics.add.collider(self.ship, self.sandwich, function () {
       this.socket.emit('sandwichCollected');
      
       touchSandwich = true
@@ -170,6 +179,7 @@ function create() {
     self.juice = self.physics.add.image(juiceLocation.x, juiceLocation.y, 'juice').setScale(.25)
     self.physics.add.overlap(self.ship, self.juice, function () {
       this.socket.emit('juiceCollected');
+      gotJuice == true
     }, null, self);
   });
       
@@ -266,7 +276,12 @@ function update() {
 
   //updtes the boerd to wait unitl a person touches the potato to start timer 
   if(touchPo == true){
-    text.setText('Event.progress: ' + timedEvent.getProgress().toString().substr(0, 4));
+    if(showPotatoText == false ){
+      potatoText.setText('Event.progress: ' + potaotTimedEvent.getProgress().toString().substr(0, 4));
+    } else if (showPotatoText == true){
+      potatoText.destroy()
+      showPotatoText = false
+    }
   }
   if (touchSandwich == true){
     if(showSandwichText == false ){
@@ -303,10 +318,12 @@ function onEvent (self){
 
 
   if (c === 10){
-    timedEvent.remove(false);
-  
+    potaotTimedEvent.remove(false);
+    showPotatoText = true
     self.ship.setTint(0xff0000)
-    self.physics.pause();
+    //self.physics.pause();
+    
+
     c = 0
     //self.socket.emit('sandwichCollected');
   }
