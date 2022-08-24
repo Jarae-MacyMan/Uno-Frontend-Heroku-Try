@@ -32,6 +32,9 @@ var sandwichText;
 var sandwichTimedEvent;
 var showSandwichText = false;
 var gotJuice = false;
+var juiceText;
+var juiceTimedEvent;
+var showJuiceText = false;
 var c = 0;
 var s = 0; //let redScoreText
 
@@ -124,9 +127,9 @@ function create() {
     if (self.potato) self.potato.destroy();
     self.potato = self.physics.add.image(potatoLocation.x, potatoLocation.y, 'potato').setScale(.2);
     self.physics.add.overlap(self.ship, self.potato, function () {
-      this.socket.emit('potatoCollected'); //once secket is receved 
-
+      //once secket is receved 
       if (gotJuice == false) {
+        this.socket.emit('potatoCollected');
         touchPo = true; //adds text and initiats timer 
 
         potatoText = this.add.text(32, 32);
@@ -170,7 +173,16 @@ function create() {
     self.juice = self.physics.add.image(juiceLocation.x, juiceLocation.y, 'juice').setScale(.25);
     self.physics.add.overlap(self.ship, self.juice, function () {
       this.socket.emit('juiceCollected');
-      gotJuice == true;
+      gotJuice = true;
+      juiceText = this.add.text(40, 40);
+      juiceTimedEvent = this.time.addEvent({
+        delay: 500,
+        callback: function callback() {
+          return onSandwich(self);
+        },
+        callbackScope: this,
+        loop: true
+      });
     }, null, self);
   }); //timedEvent = this.time.delayedCall(3000, onEvent, [], this);
   // stars = this.physics.add.group({

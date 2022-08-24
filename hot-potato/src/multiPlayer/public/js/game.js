@@ -31,12 +31,14 @@ let timedEvent;
 
 
 let touchSandwich = false 
-
 let sandwichText;
 let sandwichTimedEvent;
 let showSandwichText = false 
 
-let gotJuice = false 
+let gotJuice = false
+let juiceText
+let juiceTimedEvent;
+let showJuiceText = false 
 
 
 var c = 0;
@@ -139,15 +141,18 @@ function create() {
       if (self.potato) self.potato.destroy();
       self.potato = self.physics.add.image(potatoLocation.x, potatoLocation.y, 'potato').setScale(.2)
       self.physics.add.overlap(self.ship, self.potato, function () {
-        this.socket.emit('potatoCollected');
-        //once secket is receved 
         
+        //once secket is receved 
         if (gotJuice == false){
+          this.socket.emit('potatoCollected');
           touchPo = true
           //adds text and initiats timer 
           potatoText = this.add.text(32, 32);
           potaotTimedEvent = this.time.addEvent({ delay: 500, callback: () => onEvent(self),  callbackScope: this, loop: true });  
-        }//console.log(playerSpeed)
+        } 
+        
+        
+        //console.log(playerSpeed)
         // timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
         // this.time.addEvent(timedEvent);
         //timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
@@ -179,7 +184,12 @@ function create() {
     self.juice = self.physics.add.image(juiceLocation.x, juiceLocation.y, 'juice').setScale(.25)
     self.physics.add.overlap(self.ship, self.juice, function () {
       this.socket.emit('juiceCollected');
-      gotJuice == true
+
+      gotJuice = true
+
+      juiceText = this.add.text(40, 40);
+      juiceTimedEvent = this.time.addEvent({ delay: 500, callback: () => onSandwich(self), callbackScope: this, loop: true});
+      
     }, null, self);
   });
       
