@@ -21,10 +21,16 @@ var config = {
   }
 };
 var touchPo = false;
+var touchSandwich = false;
 var playerSpeed = 150;
 var getPo = true;
 var text;
-var timedEvent; //let redScoreText
+var timedEvent;
+var sandwichText;
+var sandwichTimedEvent;
+var showSandwichText = false;
+var c = 0;
+var s = 0; //let redScoreText
 
 var game = new Phaser.Game(config);
 
@@ -43,13 +49,14 @@ function create() {
   //this.add.image(700, 300, 'sky').setScale(2);
   var self = this;
   this.socket = io();
-  this.otherPlayers = this.physics.add.group();
+  this.otherPlayers = this.physics.add.group(); //console.log(this.otherPlayers)
+
   this.socket.on('currentPlayers', function (players) {
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
-        addPlayer(self, players[id]);
+        addPlayer(self, players[id]); //console.log(playerInfo)
       } else {
-        addOtherPlayers(self, players[id]);
+        addOtherPlayers(self, players[id]); //console.log(playerInfo)
       }
     });
   });
@@ -114,37 +121,69 @@ function create() {
     if (self.potato) self.potato.destroy();
     self.potato = self.physics.add.image(potatoLocation.x, potatoLocation.y, 'potato').setScale(.2);
     self.physics.add.overlap(self.ship, self.potato, function () {
-      this.socket.emit('potatoCollected');
-      playerSpeed = 600;
-      touchPo = true;
+      this.socket.emit('potatoCollected'); //once secket is receved 
+
+      touchPo = true; //adds text and initiats timer 
+
       text = this.add.text(32, 32);
       timedEvent = this.time.addEvent({
-        delay: 5000,
-        callbackScope: this
+        delay: 500,
+        callback: function callback() {
+          return onEvent(self);
+        },
+        callbackScope: this,
+        loop: true
       }); //console.log(playerSpeed)
       // timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
       // this.time.addEvent(timedEvent);
       //timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
     }, null, self);
+  }); //sandwich
+
+  this.socket.on('sandwichLocation', function (sandwichLocation) {
+    if (self.sandwich) self.sandwich.destroy();
+    self.sandwich = self.physics.add.image(sandwichLocation.x, sandwichLocation.y, 'sandwich').setScale(.1);
+    self.physics.add.overlap(self.ship, self.sandwich, function () {
+      this.socket.emit('sandwichCollected');
+      touchSandwich = true;
+      sandwichText = this.add.text(40, 40);
+      sandwichTimedEvent = this.time.addEvent({
+        delay: 500,
+        callback: function callback() {
+          return onSandwich(self);
+        },
+        callbackScope: this,
+        loop: true
+      }); //console.log()  
+    }, null, self); // self.physics.add.overlap(self.ship, stars, function () {
+    //   this.socket.emit('starCollected');
+    // }, null, self);
+  });
+  this.socket.on('juiceLocation', function (juiceLocation) {
+    if (self.juice) self.juice.destroy();
+    self.juice = self.physics.add.image(juiceLocation.x, juiceLocation.y, 'juice').setScale(.25);
+    self.physics.add.overlap(self.ship, self.juice, function () {
+      this.socket.emit('juiceCollected');
+    }, null, self);
   }); //timedEvent = this.time.delayedCall(3000, onEvent, [], this);
   // stars = this.physics.add.group({
-  //   key: 'star',
+  //   key: 'sandwich',
   //   repeat: 20,
   //   setXY: { x: 12, y: 0, stepX: 70 }
   // });
   //potato = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650- 0 + 1) + 0), 'potato').setScale(.2)
   //potato.body.setGravityY(300)
   //this.physics.add.collider(potato, platforms);
-
-  sandwich = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650 - 0 + 1) + 0), 'sandwich').setScale(.09);
-  juice = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650 - 0 + 1) + 0), 'juice').setScale(.25);
-  this.physics.add.overlap(self, sandwich, hitSandwich, null, this);
-
-  function hitSandwich(self, sandwich) {
-    sandwich.disableBody(true, true); //playerSpeed = 500
-    //console.log(playerSpeed)
-    //gameOver = true;
-  } // timedEvent = this.time.addEvent({ delay: 2000, callback: onEvent, callbackScope: this });
+  //sandwich = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650- 0 + 1) + 0), 'sandwich').setScale(.09)
+  //juice = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650- 0 + 1) + 0), 'juice').setScale(.25)
+  //this.physics.add.overlap(self, sandwich, hitSandwich, null, this);
+  // function hitSandwich (self, sandwich){
+  //   sandwich.disableBody(true, true);
+  //   //playerSpeed = 500
+  //   //console.log(playerSpeed)
+  //   //gameOver = true;
+  // }
+  // timedEvent = this.time.addEvent({ delay: 2000, callback: onEvent, callbackScope: this });
   //  The same as above, but uses a method signature to declare it (shorter, and compatible with GSAP syntax)
   //timedEvent = this.time.delayedCall(3000,  [], this);
   // text = this.add.text(32, 32);
@@ -154,7 +193,6 @@ function create() {
   //   text = this.add.text(32, 32);
   //   timedEvent = this.time.addEvent({ delay: 2000,  callbackScope: this });
   // }
-
 }
 
 function update() {
@@ -198,11 +236,22 @@ function update() {
       y: this.ship.y,
       rotation: this.ship.rotation
     };
-  }
+  } //updtes the boerd to wait unitl a person touches the potato to start timer 
+
 
   if (touchPo == true) {
     text.setText('Event.progress: ' + timedEvent.getProgress().toString().substr(0, 4));
-  } //console.log(text)
+  }
+
+  if (touchSandwich == true) {
+    if (showSandwichText == false) {
+      sandwichText.setText('Event.progress: ' + sandwichTimedEvent.getProgress().toString().substr(0, 4));
+    } else if (showSandwichText == true) {
+      sandwichText.destroy();
+      showSandwichText = false;
+    }
+  } //sandwichText.setText('Event.progress: ' + sandwichTimedEvent.getProgress().toString().substr(0, 4));
+  //console.log(text)
   // var progress = timedEvent.getProgress();
   // text.setText([
   //   //'Click to restart the Timer',
@@ -210,7 +259,47 @@ function update() {
   // ]);
   //console.log(progress += 1)
 
-} // function addStar(self, starLocation) {
+}
+
+function onEvent(self) {
+  //image.rotation += 0.04;
+  c++;
+  console.log(c);
+
+  if (c % 2 == 1) {
+    self.ship.setTint(0xE0FF00);
+  } else {
+    self.ship.setTint(0x0000ff);
+  }
+
+  if (c === 10) {
+    timedEvent.remove(false);
+    self.ship.setTint(0xff0000);
+    self.physics.pause();
+    c = 0; //self.socket.emit('sandwichCollected');
+  }
+}
+
+function onSandwich(self) {
+  s++;
+  console.log(s);
+  playerSpeed = 900;
+
+  if (s % 2 == 1) {
+    self.ship.setTint(0xE0FF00);
+  } else {
+    self.ship.setTint(0x0000ff);
+  }
+
+  if (s === 10) {
+    sandwichTimedEvent.remove(false);
+    showSandwichText = true;
+    self.ship.setTint(0xff0000);
+    playerSpeed = 150;
+    s = 0; //self.socket.emit('sandwichCollected');
+    //self.socket.emit('sandwichCollected');
+  }
+} // function addStar(self, sandwichLocation) {
 //   self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
 // }
 // function addpotato(self, starLocation) {

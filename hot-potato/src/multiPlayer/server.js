@@ -13,9 +13,18 @@ var star = {
 var potato = {
     x: Math.floor(Math.random() * 1350) + 50,
     y: Math.floor(Math.random() * 700) + 50
-    //touchPo: false
 
 };
+
+var sandwich = {
+  x: Math.floor(Math.random() * 1350) + 50,
+  y: Math.floor(Math.random() * 700) + 50
+}
+
+var juice = {
+  x: Math.floor(Math.random() * 1350) + 50,
+  y: Math.floor(Math.random() * 700) + 50
+}
   
   
 var scores = {
@@ -42,12 +51,20 @@ io.on('connection', function (socket) {
     playerId: socket.id,
     team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
   };
+  console.log(players)
   // send the players object to the new player
     socket.emit('currentPlayers', players);
     // send the star object to the new player
     socket.emit('starLocation', star);
 
     socket.emit('potatoLocation', potato);
+
+    //setTimeout(() => {  
+      socket.emit('sandwichLocation', sandwich);
+    //}, 5000);
+
+    socket.emit('juiceLocation', juice);
+
     // send the current scores
     socket.emit('scoreUpdate', scores);
     // update all other players of the new player
@@ -92,14 +109,34 @@ io.on('connection', function (socket) {
     potato.x = Math.floor(Math.random() * 1350) + 50;
     potato.y = Math.floor(Math.random() * 700) + 50;
     io.emit('potatoLocation', potato);
+  });
 
+  socket.on('sandwichCollected', function () {
+    // potato.touchPo = true
+    // if(potato.touchPo == true){
+    //     getPotato = true
+    // }
+    //setTimeout(() => {  
+      sandwich.x = Math.floor(Math.random() * 1350) + 50;
+      sandwich.y = Math.floor(Math.random() * 700) + 50;
+      io.emit('sandwichLocation', sandwich);
+    //}, 5000);
     
+  });
+
+  socket.on('juiceCollected', function () {
+    
+    juice.x = Math.floor(Math.random() * 1350) + 50;
+    juice.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('juiceLocation', juice);
+   
   });
 
 
 });
-
+//console.log(players)
 
 server.listen(8082, function () {
+  //console.log(players.length)
   console.log(`Listening on ${server.address().port}`);
 });
