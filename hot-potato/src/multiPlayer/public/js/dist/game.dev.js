@@ -19,7 +19,9 @@ var config = {
     create: create,
     update: update
   }
-};
+}; //let timedEvent2;
+
+var potatoVisibilityTimerDone = false;
 var touchPo = false;
 var playerSpeed = 150;
 var showPotatoText = false;
@@ -31,12 +33,18 @@ var touchSandwich = false;
 var sandwichText;
 var sandwichTimedEvent;
 var showSandwichText = false;
+var touchJuice = false;
 var gotJuice = false;
 var juiceText;
 var juiceTimedEvent;
 var showJuiceText = false;
 var c = 0;
-var s = 0; //let redScoreText
+var s = 0;
+var j = 0;
+var potatoVisibility = 0; //let potatoVisibilityTimerDone = false
+
+var p = 0;
+var potatoVisibleTimedEvent; //let redScoreText
 
 var game = new Phaser.Game(config);
 
@@ -125,7 +133,14 @@ function create() {
 
   this.socket.on('potatoLocation', function (potatoLocation) {
     if (self.potato) self.potato.destroy();
-    self.potato = self.physics.add.image(potatoLocation.x, potatoLocation.y, 'potato').setScale(.2);
+    self.potato = self.physics.add.image(potatoLocation.x, potatoLocation.y, 'potato').setScale(.2); //self.physics.moveToObject(self.potato, self.ship, 100);
+    //if(potatoVisibilityTimerDone == false){
+
+    self.potato.setVisible(false); //potatoVisibleTimedEvent = this.time.addEvent({ delay: 500, callback: onVisible,  callbackScope: this, loop: true });  
+    //console.log(potatoVisibleTimedEvent)
+    //} else if (potatoVisibilityTimerDone == true){
+    //self.potato.setVisible(true)
+
     self.physics.add.overlap(self.ship, self.potato, function () {
       //once secket is receved 
       if (gotJuice == false) {
@@ -146,8 +161,21 @@ function create() {
       // this.time.addEvent(timedEvent);
       //timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
 
-    }, null, self);
-  }); //sandwich
+    }, null, self); //this.physics.moveToObject(self.enemy, self.ship, 100);
+    //}
+    //}
+  });
+  potatoVisibleTimedEvent = this.time.addEvent({
+    delay: 500,
+    callback: function callback() {
+      return onVisible(self);
+    },
+    callbackScope: this,
+    loop: true
+  }); // function enemyFollows () {
+  //   this.physics.moveToObject(this.potato, this.ship, 100);
+  // }
+  //sandwich
 
   this.socket.on('sandwichLocation', function (sandwichLocation) {
     if (self.sandwich) self.sandwich.destroy();
@@ -173,49 +201,31 @@ function create() {
     self.juice = self.physics.add.image(juiceLocation.x, juiceLocation.y, 'juice').setScale(.25);
     self.physics.add.overlap(self.ship, self.juice, function () {
       this.socket.emit('juiceCollected');
+      touchJuice = true;
       gotJuice = true;
       juiceText = this.add.text(40, 40);
       juiceTimedEvent = this.time.addEvent({
         delay: 500,
         callback: function callback() {
-          return onSandwich(self);
+          return onJuice(self);
         },
         callbackScope: this,
         loop: true
       });
     }, null, self);
-  }); //timedEvent = this.time.delayedCall(3000, onEvent, [], this);
-  // stars = this.physics.add.group({
+  }); // stars = this.physics.add.group({
   //   key: 'sandwich',
   //   repeat: 20,
   //   setXY: { x: 12, y: 0, stepX: 70 }
   // });
-  //potato = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650- 0 + 1) + 0), 'potato').setScale(.2)
-  //potato.body.setGravityY(300)
-  //this.physics.add.collider(potato, platforms);
-  //sandwich = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650- 0 + 1) + 0), 'sandwich').setScale(.09)
-  //juice = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650- 0 + 1) + 0), 'juice').setScale(.25)
-  //this.physics.add.overlap(self, sandwich, hitSandwich, null, this);
-  // function hitSandwich (self, sandwich){
-  //   sandwich.disableBody(true, true);
-  //   //playerSpeed = 500
-  //   //console.log(playerSpeed)
-  //   //gameOver = true;
+  // if(self.ship){
+  // console.log(self.ship)
   // }
-  // timedEvent = this.time.addEvent({ delay: 2000, callback: onEvent, callbackScope: this });
-  //  The same as above, but uses a method signature to declare it (shorter, and compatible with GSAP syntax)
-  //timedEvent = this.time.delayedCall(3000,  [], this);
-  // text = this.add.text(32, 32);
-  // timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
-  // this.time.addEvent(timedEvent);
-  // if(touchPo == true){
-  //   text = this.add.text(32, 32);
-  //   timedEvent = this.time.addEvent({ delay: 2000,  callbackScope: this });
-  // }
+  // console.log(self.otherPlayers)
 }
 
 function update() {
-  if (this.ship) {
+  if (this.ship && this.potato) {
     if (this.cursors.left.isDown) {
       this.ship.setVelocityX(-playerSpeed);
       console.log(playerSpeed); //this.ship.setAngularVelocity(-150);
@@ -235,7 +245,8 @@ function update() {
     // }
 
 
-    this.physics.world.wrap(this.ship, 5); // emit player movement
+    this.physics.world.wrap(this.ship, 5);
+    this.physics.world.wrap(this.potato, 5); // emit player movement
 
     var x = this.ship.x;
     var y = this.ship.y;
@@ -255,7 +266,21 @@ function update() {
       y: this.ship.y,
       rotation: this.ship.rotation
     };
-  } //updtes the boerd to wait unitl a person touches the potato to start timer 
+  }
+
+  if (this.potato && this.ship) {
+    var potatoY = this.potato.x;
+    var potatoX = this.potato.y;
+    var rotation = Phaser.Math.Angle.Between(potatoX, potatoY, x, y);
+    this.potato.setRotation(rotation);
+  } //console.log(this.potato.x)
+  // let potatoY = this.potato.x
+  // let potatoX = this.potato.y
+  // let rotation = Phaser.Math.Angle.Between(potatoX, potatoY, x, y)
+  // this.setRotation(rotation)
+  //this.enemyFollows () 
+  //console.log(potatoVisibleTimedEvent.getProgress().toString().substr(0, 4));
+  //updtes the boerd to wait unitl a person touches the potato to start timer 
 
 
   if (touchPo == true) {
@@ -274,6 +299,15 @@ function update() {
       sandwichText.destroy();
       showSandwichText = false;
     }
+  }
+
+  if (touchJuice == true) {
+    if (showJuiceText == false) {
+      juiceText.setText('Event.progress: ' + juiceTimedEvent.getProgress().toString().substr(0, 4));
+    } else if (showJuiceText == true) {
+      juiceText.destroy();
+      showJuiceText = false;
+    }
   } //sandwichText.setText('Event.progress: ' + sandwichTimedEvent.getProgress().toString().substr(0, 4));
   //console.log(text)
   // var progress = timedEvent.getProgress();
@@ -283,17 +317,32 @@ function update() {
   // ]);
   //console.log(progress += 1)
 
+} // function enemyFollows (self) {
+//   this.physics.moveToObject(self.potato, self.ship, 100);
+// }
+
+
+function onVisible(self) {
+  p++;
+  console.log(p);
+
+  if (p === 10) {
+    potatoVisibleTimedEvent.remove(false);
+    self.potato.setVisible(true);
+    potatoVisibilityTimerDone = true; //potatoVisibilityTimerDone == true
+  }
 }
 
 function onEvent(self) {
   //image.rotation += 0.04;
+  //potatoVisibility++
   c++;
   console.log(c);
 
   if (c % 2 == 1) {
     self.ship.setTint(0xE0FF00);
   } else {
-    self.ship.setTint(0x0000ff);
+    self.ship.setTint(0x0000ff); //self.potato.setVisible(false)
   }
 
   if (c === 10) {
@@ -301,6 +350,7 @@ function onEvent(self) {
     showPotatoText = true;
     self.ship.setTint(0xff0000); //self.physics.pause();
 
+    self.potato.setVisible(true);
     c = 0; //self.socket.emit('sandwichCollected');
   }
 }
@@ -323,6 +373,27 @@ function onSandwich(self) {
     playerSpeed = 150;
     s = 0; //self.socket.emit('sandwichCollected');
     //self.socket.emit('sandwichCollected');
+  }
+}
+
+function onJuice(self) {
+  //image.rotation += 0.04;
+  j++;
+  console.log(j);
+
+  if (j % 2 == 1) {
+    self.ship.setTint(0xE0FF00);
+  } else {
+    self.ship.setTint(0x0000ff);
+  }
+
+  if (j === 10) {
+    juiceTimedEvent.remove(false);
+    showJuiceText = true;
+    self.ship.setTint(0xff0000);
+    gotJuice = false; //self.physics.pause();
+
+    j = 0; //self.socket.emit('sandwichCollected');
   }
 } // function addStar(self, sandwichLocation) {
 //   self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
@@ -349,6 +420,10 @@ function addPlayer(self, playerInfo) {
   self.ship.setDrag(1);
   self.ship.setAngularDrag(1);
   self.ship.setMaxVelocity(200);
+
+  if (this.otherPlayers) {
+    console.log(this.otherPlayers);
+  }
 }
 
 function addOtherPlayers(self, playerInfo) {
@@ -367,4 +442,7 @@ function addOtherPlayers(self, playerInfo) {
 
   otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
-}
+} // function collide (self, playerInfo){
+//   if(self){
+//   }
+// }
