@@ -10,11 +10,17 @@ var star = {
     y: Math.floor(Math.random() * 700) + 50
 };
 
-var potato = {
-    x: Math.floor(Math.random() * 1350) + 50,
-    y: Math.floor(Math.random() * 700) + 50
-
+var starTwo = {
+  x: Math.floor(Math.random() * 1350) + 50,
+  y: Math.floor(Math.random() * 700) + 50
 };
+
+// var star3 = {
+//   x: Math.floor(Math.random() * 1350) + 50,
+//   y: Math.floor(Math.random() * 700) + 50
+// };
+
+
 
 var sandwich = {
   x: Math.floor(Math.random() * 1350) + 50,
@@ -25,14 +31,13 @@ var juice = {
   x: Math.floor(Math.random() * 1350) + 50,
   y: Math.floor(Math.random() * 700) + 50
 }
+
+
   
   
 var scores = {
     blue: 0,
     red: 0,
-    //green: 0,
-    //yellow: 0
-
   };
 
 app.use(express.static(__dirname + '/public'));
@@ -46,18 +51,27 @@ io.on('connection', function (socket) {
   // create a new player and add it to our players object
   players[socket.id] = {
     rotation: 0,
-    x: Math.floor(Math.random() * 700) + 50,
-    y: Math.floor(Math.random() * 500) + 50,
+    x: Math.floor(Math.random() * 1350) + 50,
+    y: Math.floor(Math.random() *  700) + 50,
     playerId: socket.id,
     team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
   };
-  console.log(players)
+
+  potato = {
+    rotation: 0,
+    x: Math.floor(Math.random() * 1350) + 50,
+    y: Math.floor(Math.random() * 700) + 50
+  };
   // send the players object to the new player
     socket.emit('currentPlayers', players);
     // send the star object to the new player
     socket.emit('starLocation', star);
+    socket.emit('starTwoLocation', starTwo);
+    //socket.emit('star3Location', star3);
+
 
     socket.emit('potatoLocation', potato);
+    socket.emit('potatoMovement', potato);
 
     //setTimeout(() => {  
       socket.emit('sandwichLocation', sandwich);
@@ -89,6 +103,16 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('playerMoved', players[socket.id]);
   });
 
+  // socket.on('potatoMovement', function (movementDataPotato) {
+  //   potato.x = movementDataPotato.x;
+  //   potato.y = movementDataPotato.y;
+  //   potato.rotation = movementDataPotato.rotation;
+  //   // emit a message to all players about the player that moved
+  //   socket.broadcast.emit('potatoMoved', potato);
+  // });
+
+  
+
   socket.on('starCollected', function () {
     if (players[socket.id].team === 'red') {
       scores.red += 10;
@@ -101,6 +125,30 @@ io.on('connection', function (socket) {
     io.emit('scoreUpdate', scores);
   });
 
+  socket.on('starTwoCollected', function () {
+    if (players[socket.id].team === 'red') {
+      scores.red += 10;
+    } else {
+      scores.blue += 10;
+    }
+    starTwo.x = Math.floor(Math.random() * 1350) + 50;
+    starTwo.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('starTwoLocation', starTwo);
+    io.emit('scoreUpdate', scores);
+  });
+
+  // socket.on('star3Collected', function () {
+  //   if (players[socket.id].team === 'red') {
+  //     scores.red += 10;
+  //   } else {
+  //     scores.blue += 10;
+  //   }
+  //   star3.x = Math.floor(Math.random() * 1350) + 50;
+  //   star3.y = Math.floor(Math.random() * 700) + 50;
+  //   io.emit('star3Location', star);
+  //   io.emit('scoreUpdate', scores);
+  // });
+
   socket.on('potatoCollected', function () {
     // potato.touchPo = true
     // if(potato.touchPo == true){
@@ -110,6 +158,7 @@ io.on('connection', function (socket) {
     potato.y = Math.floor(Math.random() * 700) + 50;
     io.emit('potatoLocation', potato);
   });
+  
 
   socket.on('sandwichCollected', function () {
     // potato.touchPo = true
