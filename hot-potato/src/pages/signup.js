@@ -3,7 +3,7 @@ import Context from '../context/Context';
 import React from 'react';
 import {Button, Input, Label, FormGroup, Form} from 'reactstrap'
 import '../style/signup.css'
-import NavbarFunc from './navbar';
+
 
 function SignUp(){
   const navigate = useNavigate()
@@ -50,17 +50,20 @@ return (
       <div className='form-container'>
         <body>
           <h2>Create a player</h2>
-          <Form inline onSubmit={handleSubmit}>
-            <FormGroup className="mb-2 me-sm-2 mb-sm-0">
+          <Form inline onSubmit={handleSubmit} className="form" >
+            <FormGroup className="mb-2 me-sm-2 mb-sm-0 input">
               <Label className="me-sm-2" for="exampleEmail"> Username </Label>
               <Input id="exampleEmail" name="username" placeholder="Enter your username" type="username"/>
             </FormGroup>
-            <FormGroup className="mb-2 me-sm-2 mb-sm-0">
+            <FormGroup className="mb-2 me-sm-2 mb-sm-0 input">
               <Label className="me-sm-2" for="examplePassword"> Password </Label>
               <Input id="examplePassword" name="password" placeholder="Enter password" type="password"/>
             </FormGroup>
-            <p><Link to="/" className='link'>Login</Link></p>
-            <Button type='submit'>Submit</Button>
+            <div className='btn'>
+            <p> Already a player? <Link to="/" className='link'>Login</Link></p>
+            
+            <Button  type='submit'>Submit</Button>
+            </div>
           </Form> 
         </body>
       </div>

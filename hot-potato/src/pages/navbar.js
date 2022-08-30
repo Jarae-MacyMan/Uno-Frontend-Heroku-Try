@@ -14,9 +14,9 @@ function NavbarFunc(props){
   return (
     <div>
       <Navbar className='navbar-container'>
-        <NavbarBrand href="/home">HOT POTATO </NavbarBrand>
+        <NavbarBrand className='nav-heading' href="/home">HOT POTATO </NavbarBrand>
         <NavbarToggler onClick={toggle} />
-          <NavbarText>Welcome {context.userInfo.playerInfo.username}</NavbarText> 
+          <NavbarText className='nav-name'>Welcome, {context.userInfo.playerInfo.username}</NavbarText> 
       </Navbar>
     </div>
   );

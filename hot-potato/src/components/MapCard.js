@@ -91,12 +91,13 @@ function MapCard(props){
       if('game' in data){
         navigate(`/Waiting-Room/${data.game[0].game_id}`)
       }
+
     })
   }, [gameInfo])
 
   useEffect(() => {
     joinGame(joinGameInfo).then(data => {
-      console.log(data.data.game_id)
+      // console.log(data.data.game_id)
       if('data' in data){
         navigate(`/Waiting-Room/${data.data.game_id}`)
       }

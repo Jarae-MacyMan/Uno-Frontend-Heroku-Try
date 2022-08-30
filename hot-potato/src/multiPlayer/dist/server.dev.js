@@ -1,5 +1,5 @@
 "use strict";
-
+function gameSocket(){
 var express = require('express');
 
 var app = express();
@@ -117,3 +117,6 @@ server.listen(8082, function () {
   //console.log(players.length)
   console.log("Listening on ".concat(server.address().port));
 });
+}
+
+export default gameSocket

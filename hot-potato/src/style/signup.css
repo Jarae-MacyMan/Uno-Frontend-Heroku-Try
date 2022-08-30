@@ -1,22 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe&display=swap');
+
 body{
     background-color: rgb(72, 72, 255);
 }
+
+.form{
+    padding-top: 50px;
+}
+
 .form-container{
    
 display:flex;
 flex-direction: column;
 justify-content: center;
-padding-top: 75px;
+/* text-align: center; */
+align-items: center;
+padding-top: 100px;
 
-width: 300px;
+/* width: 300px; */
 }
 
 .form-container Label{
 color: white;
 }
 .form-container h2{
+    font-weight:bolder;
+    font-family: 'Alumni Sans Pinstripe', sans-serif;
+   color: white; 
+      font-size:65px;
+    
+}
+.form-container p {
     color: white;
+}
+.form-container button{
+    width: 80px;
+    height: 40px;
+     border: none;
+     border-radius: 25px;
+     
 }
 .link {
     color: white;
+}
+.btn{
+    display: flex;
+    flex-direction: column;
+justify-content: center;
+/* text-align: center; */
+align-items: center;
+   /* pointer-events: none; */
+}
+
+
+.input {
+ padding-bottom: 30px;
 }

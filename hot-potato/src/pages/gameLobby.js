@@ -1,7 +1,10 @@
 
 import { useEffect, useState, useContext } from "react";
-import { Navigate, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Context from "../context/Context";
+import NavbarFunc from "./navbar"
+import {CircularProgress} from '@mui/material'
+import "../style/gameLobby.css"
 
 function WaitingRoom (){
     let params = useParams();
@@ -19,7 +22,7 @@ function WaitingRoom (){
 
     useEffect(() => {
         context.getAllGames().then(gamesList => {
-            updateCurrentGame(gamesList.find(games => games.game_id == params.id))
+            updateCurrentGame(gamesList.find(games => games.game_id === params.id))
         })
     }, [context.gamesList])
 
@@ -27,6 +30,7 @@ function WaitingRoom (){
         fetch(`http://localhost:3032/games/${params.id}/players`)
         .then(res => res.json())
         .then((data) => {
+        
             //mapping over the data make another fetch call to get the player username set the playerlist
             data.playerList.map((info) => {
                 fetch(`http://localhost:3032/games/${info.game_id}/players/playernames`)
@@ -121,25 +125,35 @@ function WaitingRoom (){
     
     return(
         <div>
-            <div>
-                <img src="https://cdna.artstation.com/p/assets/images/images/024/979/396/large/sarath-kumar-nyc-street-day.jpg?1584168680" />
+            <NavbarFunc/>
+            <div className="header">
+            <h2>Waiting room </h2>
+            <div className="game-img" >
+
+                <img  src="https://cdna.artstation.com/p/assets/images/images/024/979/396/large/sarath-kumar-nyc-street-day.jpg?1584168680" />
+                <CircularProgress className="overlay" color="inherit" />
             </div>
-            <p>Players in the Lobby: {params.id} </p>
+            </div>
+            <div className="friends">
+            <h4>Players in the Lobby</h4>
             <div>
                 {currentPlayerList.map((player) => {
-                    return <p key={player.player_id}>{player.username}</p>
+                    return <ol key={player.player_id}> <li>{player.username}</li></ol>
                 })}
             </div>
-            <div>
+            <div className="game-btn">
                 {game.hosted_by === context.userInfo.playerInfo.username && 
                     <div>
                         <button>Start</button>
-                        <button onClick={handleCloseClick}>Close</button>
-                        <button onClick={handlePublicClick}>{isClicked ? 'Private' : 'Public'}</button>
+                        {/* <button onClick={handleCloseClick}>Close</button> */}
+                        {/* <button onClick={handlePublicClick}>{isClicked ? 'Private' : 'Public'}</button> */}
                     </div>
                 }
+           
+            <button onClick={handleLeaveClick}>Leave Room</button> 
+            
             </div>
-            <button onClick={handleLeaveClick}>Leave Room</button>
+            </div>
         </div>
     )
 }
