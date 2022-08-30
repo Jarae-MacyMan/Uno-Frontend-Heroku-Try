@@ -54,7 +54,7 @@ let potatoMove = false
 let showPausedText = false
 
 
-
+var explosions;
 
 var c = 10;
 var s = 10
@@ -84,6 +84,10 @@ function preload() {
   this.load.image('juice', 'assets/juice.png');
   this.load.image('circle', 'assets/circle1.png');
 
+  this.load.spritesheet( 'kaboom', 'assets/explode.png', {
+    frameWidth: 128,
+    frameHeight: 128
+});
 
 
 }
@@ -247,6 +251,22 @@ function create() {
       
     }, null, self);
   });
+
+  this.anims.create({
+    key: 'explode',
+    frames: this.anims.generateFrameNumbers( 'kaboom', {
+        start: 0,
+        end: 15
+    }),
+    frameRate: 16,
+    repeat: 0,
+    hideOnComplete: true
+  });
+
+  explosions = this.add.group({
+    defaultKey: 'kaboom',
+    maxSize: 30
+  })
       
     
   // stars = this.physics.add.group({
@@ -421,10 +441,15 @@ function onStart () {
 
 function onVisible (self){
   p--
-  
+  potatoMove = false
+
   if( p == 5){
     playerPaused = true
-    
+    self.explosion = explosions.get().setActive( true );
+    self.explosion.setOrigin( 0.5, 0.5 );
+    self.explosion.x = self.ship.x;
+    self.explosion.y = self.ship.y;
+    self.explosion.play( 'explode' );
     self.physics.pause()
   }
 
@@ -444,20 +469,22 @@ function onVisible (self){
 
 function onEvent (self){
     //image.rotation += 0.04;
-    
+  
   //potatoVisibility++
   c--;
+  potatoMove = false
   //self.potato.setVisible(false)
   //console.log(c)
   
   if (c === 0){
     potaotTimedEvent.remove(false);
     showPotatoText = true
-    
+    potatoMove = true
     //self.physics.pause();
     //self.potato.setVisible(true)
     //self.physics.potato.pause()
     c = 10
+    
     //self.socket.emit('sandwichCollected');
   }
 }
@@ -488,40 +515,38 @@ function onSandwich (self){
 
 }
 
+//if (touchJuice = false ){
+
 function onJuice (self){
   //image.rotation += 0.04;
   //potatoMove = false
+  j--;
   potaotTimedEvent.remove(false);
   potatoVisibleTimedEvent.remove(false);
   showPotatoText = true
   showPausedText = true
   //potatoMove = true
-  j--;
+  c = 10
+  p = 15
+ 
   self.physics.resume()
-  //console.log(j)
 
-  // console.log(self.ship.color)
-
-  // if(j % 2 == 1){
-  //   self.ship.setTint(0xE0FF00);
-  // } 
-
-
-  if (j === 0){
+  if (j == 0){
     juiceTimedEvent.remove(false);
     //self.ship.setTint(0xff0000);
     showJuiceText = true
     self.physics.resume()
-    gotJuice = false
+    //gotJuice = false
     potatoMove = true
     //self.physics.pause();
-    
-    
-
     j =  10
     //self.socket.emit('sandwichCollected');
+    gotJuice = false
+    touchJuice == false
+    
   }
 }
+//}
 
 
 
@@ -543,10 +568,6 @@ function addPlayer(self, playerInfo) {
   self.ship.setDrag(1);
   self.ship.setAngularDrag(1);
   self.ship.setMaxVelocity(200);
-
- 
-  
-
  
 }
 

@@ -3,6 +3,13 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+// var io = require('socket.io');
+// var server = http.createServer();
+// server.listen(port, ipAddress);
+// var socket = io.listen(server);
+// var socket = new io.Socket();
+// socket.connect('http://' + ipAddress + ':' + port);
+
 var players = {};
 
 var star = {
