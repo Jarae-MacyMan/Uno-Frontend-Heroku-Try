@@ -1,4 +1,82 @@
-var config = {
+
+
+//let timedEvent2;
+let potatoVisibilityTimerDone = false
+
+
+let touchPo = false
+let playerSpeed = 150
+
+let showPotatoText = false 
+let potatoText;
+let potaotTimedEvent;
+
+
+
+let text;
+let timedEvent;
+
+
+
+let touchSandwich = false 
+let sandwichText;
+let sandwichTimedEvent;
+let showSandwichText = false 
+
+let touchJuice = false 
+let gotJuice = false
+let juiceText
+let juiceTimedEvent
+let showJuiceText = false 
+
+let pausedText
+let playerPaused = false
+
+
+let potatoMove = false
+let showPausedText = false
+
+
+var explosions;
+
+var c = 10;
+var s = 10
+var p = 15
+var j = 10
+
+let potaotStartTimedEvent;
+var start = 3
+
+//let potatoVisibility = 0
+//let potatoVisibilityTimerDone = false
+
+let potatoVisibleTimedEvent;
+
+
+let hasJuice = false  //no stack
+let hasSandwich = false
+let hasPotato = false
+
+//movement after juice
+let jc = false
+
+
+let juiceCollider
+
+let player1Score
+let player2Score
+let player3Score
+let player4Score
+
+
+let player1WinText
+let player2WinText
+let player3WinText
+let player4WinText
+
+
+//let redScoreText
+var game = new Phaser.Game({
   type: Phaser.AUTO,
   parent: 'phaser-example',
   width: 1422,
@@ -15,52 +93,34 @@ var config = {
     create: create,
     update: update
   } 
-};
-
-let touchPo = false
-let playerSpeed = 150
-
-let showPotatoText = false 
-let potatoText;
-let potaotTimedEvent;
-
-
-let text;
-let timedEvent;
+});
 
 
 
-let touchSandwich = false 
-
-let sandwichText;
-let sandwichTimedEvent;
-let showSandwichText = false 
-
-let gotJuice = false 
-
-
-var c = 0;
-var s = 0
-
-//let redScoreText
-var game = new Phaser.Game(config);
 function preload() {
   this.load.image('sky', 'assets/city3.png');
 
   this.load.image('ship', 'assets/spaceShips_001.png');
   this.load.image('otherPlayer', 'assets/enemyBlack5.png');
   this.load.image('star', 'assets/star.png');
+  this.load.image('star2', 'assets/star.png');
+
   this.load.image('potato', 'assets/potato.png');
   this.load.image('sandwich', 'assets/sandwich.png');
   this.load.image('juice', 'assets/juice.png');
   this.load.image('circle', 'assets/circle1.png');
 
+  this.load.spritesheet( 'kaboom', 'assets/explode.png', {
+    frameWidth: 128,
+    frameHeight: 128
+  });
 
-
+  
 }
+
+
 function create() {
   //this.add.image(700, 300, 'sky').setScale(2);
-
 
   var self = this;
   this.socket = io();
@@ -70,13 +130,13 @@ function create() {
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
         addPlayer(self, players[id]);
-        //console.log(playerInfo)
       } else {
         addOtherPlayers(self, players[id]);
-        //console.log(playerInfo)
       }
     });
   });
+
+
   this.socket.on('newPlayer', function (playerInfo) {
     addOtherPlayers(self, playerInfo);
     
@@ -88,7 +148,6 @@ function create() {
       }
     });
   });
-
 
   this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -102,76 +161,223 @@ function create() {
   });
 
 
+
   this.socket.on('starLocation', function (starLocation) {
-    // stars = this.physics.add.group({
-    //   key: 'star',
-    //   repeat: 10,
-    //   setXY: { x: starLocation.x, y: starLocation.y, stepX: 70 }
-    // });
+   
       if (self.star) self.star.destroy();
       self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
       self.physics.add.overlap(self.ship, self.star, function () {
         this.socket.emit('starCollected');
       }, null, self);
-      // self.physics.add.overlap(self.ship, stars, function () {
-      //   this.socket.emit('starCollected');
-      // }, null, self);
+     
     });
 
-  this.blueScoreText = this.add.text(16, 16, 'Blue:', { fontSize: '32px', fill: '#0000FF' });
-  this.redScoreText = this.add.text(550, 16, 'Red:', { fontSize: '32px', fill: '#FF0000' });
-  this.greenScoreText = this.add.text(850, 16, 'Green: 0', { fontSize: '32px', fill: '#22e81c' });
-  this.yellowScoreText = this.add.text(1150, 16, 'Yellow: 0', { fontSize: '32px', fill: '#fbe103' });
+    this.socket.on('starTwoLocation', function (starTwoLocation) {
+   
+      if (self.starTwo) self.starTwo.destroy();
+      self.starTwo = self.physics.add.image(starTwoLocation.x, starTwoLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starTwo, function () {
+        console.log(2)
+
+        this.socket.emit('starTwoCollected');
+      }, null, self);
+     
+    });
+
+    this.socket.on('starThreeLocation', function (starThreeLocation) {
+   
+      if (self.starThree) self.starThree.destroy();
+      self.starThree = self.physics.add.image(starThreeLocation.x, starThreeLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starThree, function () {
+        console.log(3)
+
+        this.socket.emit('starThreeCollected');
+      }, null, self);
+     
+    });
+
+    this.socket.on('starFourLocation', function (starFourLocation) {
+   
+      if (self.starFour) self.starFour.destroy();
+      self.starFour = self.physics.add.image(starFourLocation.x, starFourLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starFour, function () {
+        console.log(4)
+
+        this.socket.emit('starFourCollected');
+      }, null, self);
+     
+    });
+
+    this.socket.on('starFiveLocation', function (starFiveLocation) {
+   
+      if (self.starFive) self.starFive.destroy();
+      self.starFive = self.physics.add.image(starFiveLocation.x, starFiveLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starFive, function () {
+        console.log(5)
+
+        this.socket.emit('starFiveCollected');
+      }, null, self);
+     
+    });
+
+    this.socket.on('starSixLocation', function (starSixLocation) {
+   
+      if (self.starSix) self.starSix.destroy();
+      self.starSix = self.physics.add.image(starSixLocation.x, starSixLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starSix, function () {
+        console.log(6)
+
+        this.socket.emit('starSixCollected');
+      }, null, self);
+     
+    });
+
+    this.socket.on('starSevenLocation', function (starSevenLocation) {
+   
+      if (self.starSeven) self.starSeven.destroy();
+      self.starSeven = self.physics.add.image(starSevenLocation.x, starSevenLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starSeven, function () {
+        console.log(7)
+        this.socket.emit('starSevenCollected');
+      }, null, self);
+     
+    });
+
+    this.socket.on('starEightLocation', function (starEightLocation) {
+   
+      if (self.starEight) self.starEight.destroy();
+      self.starEight = self.physics.add.image(starEightLocation.x, starEightLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starEight, function () {
+        console.log(8)
+        this.socket.emit('starEightCollected');
+      }, null, self);
+     
+    });
+
+    this.socket.on('starNineLocation', function (starNineLocation) {
+   
+      if (self.starNine) self.starNine.destroy();
+      self.starNine = self.physics.add.image(starNineLocation.x, starNineLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starNine, function () {
+        console.log(9)
+
+        this.socket.emit('starNineCollected');
+      }, null, self);
+     
+    });
+
+    this.socket.on('starTenLocation', function (starTenLocation) {
+   
+      if (self.starTen) self.starTen.destroy();
+      self.starTen = self.physics.add.image(starTenLocation.x, starTenLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starTen, function () {
+        console.log(10)
+
+        this.socket.emit('starTenCollected');
+      }, null, self);
+     
+    });
+
+
+
+    this.player1WinText = this.add.text(700, 400, { fontSize: '100px', fill: '#0000FF' })
+    this.player1WinText.setVisible(false)
+
+    this.player2WinText = this.add.text(700, 400, { fontSize: '100px', fill: '#FF0000' })
+    this.player2WinText.setVisible(false)
+    
+    this.player3WinText = this.add.text(700, 400, { fontSize: '100px', fill: '#FFE400' })
+    this.player3WinText.setVisible(false)
+
+    this.player4WinText = this.add.text(700, 400, { fontSize: '100px', fill: '#FFE400' })
+    this.player4WinText.setVisible(false)
+    
+
+  this.player1ScoreText = this.add.text(16, 16, 'Player:', { fontSize: '32px', fill: '#0000FF' });
+  this.player2ScoreText  = this.add.text(250, 16, 'Player:', { fontSize: '32px', fill: '#FF0000' });
+  this.player3ScoreText = this.add.text(450, 16, 'Player:', { fontSize: '32px', fill: '#FFE400' });
+  this.player4ScoreText = this.add.text(700, 16, 'Player:', { fontSize: '32px', fill: '#00FF51' });
 
   
-// this.blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#0000FF' });
-// this.redScoreText = this.add.text(584, 16, '', { fontSize: '32px', fill: '#FF0000' });
-  
-  this.socket.on('scoreUpdate', function (scores) {
-    self.blueScoreText.setText('Blue: ' + scores.blue);
-    self.redScoreText.setText('Red: ' + scores.red);
-    // self.blueScoreText.setText('Green: ' + scores.green);
-    // self.redScoreText.setText('Yellow: ' + scores.yellow);
+
+  this.socket.on('playerScoreUpdate', function (arg) {
+    const {theScore, playerNum} = arg
+    if (playerNum == 1) {
+      self.player1ScoreText.setText('Player' + playerNum + ':' + theScore);
+      player1Score = theScore
+      stopGame(self)
+    } else if (playerNum == 2) {
+      self.player2ScoreText.setText('Player' + playerNum + ': ' + theScore);
+      player2Score = theScore
+      stopGame(self)
+    } else if (playerNum == 3) {
+      self.player3ScoreText.setText('Player' + playerNum + ': ' + theScore);
+      player3Score = theScore
+      stopGame(self)
+    } else if (playerNum == 4) {
+      self.player4ScoreText.setText('Player' + playerNum + ': ' + theScore);
+      player4Score = theScore
+      stopGame(self)
+    }
   });
-  // //  star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
+
+
 
   this.socket.on('potatoLocation', function (potatoLocation) {
+
       if (self.potato) self.potato.destroy();
       self.potato = self.physics.add.image(potatoLocation.x, potatoLocation.y, 'potato').setScale(.2)
-      self.physics.add.overlap(self.ship, self.potato, function () {
-        this.socket.emit('potatoCollected');
-        //once secket is receved 
-        
-        if (gotJuice == false){
-          touchPo = true
-          //adds text and initiats timer 
-          potatoText = this.add.text(32, 32);
-          potaotTimedEvent = this.time.addEvent({ delay: 500, callback: () => onEvent(self),  callbackScope: this, loop: true });  
-        }//console.log(playerSpeed)
-        // timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
-        // this.time.addEvent(timedEvent);
-        //timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
-      }, null, self);
+
+     
+ 
+        self.physics.add.overlap(self.ship, self.potato, function () {
+
+            this.socket.emit('potatoCollected');
+
+            if (gotJuice == false){
+            
+           
+            jc = true
+            //adds text and initiats timer 
+            if(hasPotato == false ){
+              touchPo = true
+              potatoMove = false
+              potatoText = this.add.text(1100, 20);
+              potaotTimedEvent = this.time.addEvent({ delay: 500, callback: () => onEvent(self),  callbackScope: this, loop: true }); 
+           
+              pausedText = this.add.text(1100, 40);
+              potatoVisibleTimedEvent = this.time.addEvent({ delay: 500, callback: () => onVisible(self),  callbackScope: this, loop: true });  
+            }
+          } 
+          
+        }, null, self);
+
     });
-  //sandwich
+
+    potaotStartTimedEvent = this.time.addEvent({ delay: 3000, callback: () => onStart(self), callbackScope: this, loop: true});
+
+
 
   this.socket.on('sandwichLocation', function (sandwichLocation) {
     
     if (self.sandwich) self.sandwich.destroy();
     self.sandwich = self.physics.add.image(sandwichLocation.x, sandwichLocation.y, 'sandwich').setScale(.1)
     self.physics.add.collider(self.ship, self.sandwich, function () {
+      self.sandwich.setVisible(false)
       this.socket.emit('sandwichCollected');
-     
+      
+      
       touchSandwich = true
-
-      sandwichText = this.add.text(40, 40);
-      sandwichTimedEvent = this.time.addEvent({ delay: 500, callback: () => onSandwich(self), callbackScope: this, loop: true});
-      //console.log()  
+      //hasSandwich = true 
+      //self.sandwich.setVisible(false)
+      
+      if(hasSandwich == false ){
+        sandwichText = this.add.text(1100, 60);
+        sandwichTimedEvent = this.time.addEvent({ delay: 500, callback: () => onSandwich(self), callbackScope: this, loop: true});
+      } 
         
     }, null, self);
-        // self.physics.add.overlap(self.ship, stars, function () {
-        //   this.socket.emit('starCollected');
-        // }, null, self);
+      
   });
 
   this.socket.on('juiceLocation', function (juiceLocation) {
@@ -179,65 +385,47 @@ function create() {
     self.juice = self.physics.add.image(juiceLocation.x, juiceLocation.y, 'juice').setScale(.25)
     self.physics.add.overlap(self.ship, self.juice, function () {
       this.socket.emit('juiceCollected');
-      gotJuice == true
+
+      touchJuice = true
+      gotJuice = true
+      
+      self.juice.setVisible(false)
+
+      if(hasJuice == false){
+        juiceText = this.add.text(1100, 80);
+        juiceTimedEvent = this.time.addEvent({ delay: 500, callback: () => onJuice(self), callbackScope: this, loop: true});
+      }
     }, null, self);
   });
-      
-    //timedEvent = this.time.delayedCall(3000, onEvent, [], this);
+
+  this.anims.create({
+    key: 'explode',
+    frames: this.anims.generateFrameNumbers( 'kaboom', {
+        start: 0,
+        end: 15
+    }),
+    frameRate: 16,
+    repeat: 0,
+    hideOnComplete: true
+  });
+
+  explosions = this.add.group({
+    defaultKey: 'kaboom',
+    maxSize: 30
+  })
     
-  // stars = this.physics.add.group({
-  //   key: 'sandwich',
-  //   repeat: 20,
-  //   setXY: { x: 12, y: 0, stepX: 70 }
-  // });
-
-      //potato = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650- 0 + 1) + 0), 'potato').setScale(.2)
-      //potato.body.setGravityY(300)
-      //this.physics.add.collider(potato, platforms);
-    //sandwich = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650- 0 + 1) + 0), 'sandwich').setScale(.09)
-
-    //juice = this.physics.add.sprite(Math.floor(Math.random() * (1290 - 20 + 1) + 20), Math.floor(Math.random() * (650- 0 + 1) + 0), 'juice').setScale(.25)
-
-      //this.physics.add.overlap(self, sandwich, hitSandwich, null, this);
-
-    // function hitSandwich (self, sandwich){
-
-    //   sandwich.disableBody(true, true);
-
-    //   //playerSpeed = 500
-
-    //   //console.log(playerSpeed)
-
-    //   //gameOver = true;
-
-    // }
-
-
-    // timedEvent = this.time.addEvent({ delay: 2000, callback: onEvent, callbackScope: this });
-
-    //  The same as above, but uses a method signature to declare it (shorter, and compatible with GSAP syntax)
-    //timedEvent = this.time.delayedCall(3000,  [], this);
-    
-
-    // text = this.add.text(32, 32);
-
-    // timedEvent = new Phaser.Time.TimerEvent({ delay: 4000 });
-
-    // this.time.addEvent(timedEvent);
-    // if(touchPo == true){
-    //   text = this.add.text(32, 32);
-    //   timedEvent = this.time.addEvent({ delay: 2000,  callbackScope: this });
-    // }
 }
+
+
+/////////////////////////////////////////
 
 function update() {
 
 
-  if (this.ship) {
+  if (this.ship ) {
     if (this.cursors.left.isDown) {
       this.ship.setVelocityX(-playerSpeed);
       console.log(playerSpeed)
-
       //this.ship.setAngularVelocity(-150);
     } else if (this.cursors.right.isDown) {
       this.ship.setVelocityX(playerSpeed);
@@ -256,8 +444,10 @@ function update() {
     // } else {
     //   this.ship.setAcceleration(0);
     // }
-  
+    this.ship.body.velocity.normalize().scale(150)
     this.physics.world.wrap(this.ship, 5);
+    this.physics.world.wrap(this.potato, 5);
+
 
     // emit player movement
     var x = this.ship.x;
@@ -272,12 +462,55 @@ function update() {
       y: this.ship.y,
       rotation: this.ship.rotation
     };
+
+    if( potatoMove == true && hasPotato == false ) {
+      let px = this.potato.x;
+      let py = this.potato.y;
+      var pr = this.potato.rotation;
+
+      var dx = this.ship.x - px;
+      var dy = this.ship.y - py;
+      
+      if (Math.abs(dx) < 1422 && Math.abs(dx) < 800 ) {
+        this.potato.setVelocityX(Math.sign(dx) * 150);
+        this.potato.setVelocityY(Math.sign(dy) * 150);
+      }
+      this.potato.body.velocity.normalize().scale(150)
+
+    }
+
+  // if (this.potato.oldPosition && (px !== this.potato.oldPosition.x || py !== this.potato.oldPosition.y)) {
+  //   this.socket.emit('potatoLocation', { x: this.potato.x, y: this.potato.y });
+  // }
+
+  // save old position data
+  // this.potato.oldPosition = {
+  //   x: this.potato.x,
+  //   y: this.potato.y,
+  //   rotation: this.potato.rotation
+  // };
+
+  
   }
 
+ 
+
+    
+  //console.log(this.potato.x)
+		// let potatoY = this.potato.x
+		// let potatoX = this.potato.y
+
+		// let rotation = Phaser.Math.Angle.Between(potatoX, potatoY, x, y)
+		// this.setRotation(rotation)
+
+  //this.enemyFollows () 
+  
+  //console.log(potatoVisibleTimedEvent.getProgress().toString().substr(0, 4));
+
   //updtes the boerd to wait unitl a person touches the potato to start timer 
-  if(touchPo == true){
+  if(touchPo == true ){
     if(showPotatoText == false ){
-      potatoText.setText('Event.progress: ' + potaotTimedEvent.getProgress().toString().substr(0, 4));
+      potatoText.setText('PAUSED IN ' + c);
     } else if (showPotatoText == true){
       potatoText.destroy()
       showPotatoText = false
@@ -285,91 +518,167 @@ function update() {
   }
   if (touchSandwich == true){
     if(showSandwichText == false ){
-      sandwichText.setText('Event.progress: ' + sandwichTimedEvent.getProgress().toString().substr(0, 4));
+      sandwichText.setText('SPEED BOOST ' + s);
     } else if (showSandwichText == true){
       sandwichText.destroy()
       showSandwichText = false
     }
   }
-  //sandwichText.setText('Event.progress: ' + sandwichTimedEvent.getProgress().toString().substr(0, 4));
 
-  //console.log(text)
-  // var progress = timedEvent.getProgress();
+  if (touchJuice == true){
+    if(showJuiceText == false ){
+      juiceText.setText('YOU ARE SHEILDED ' +  j);
+    } else if (showJuiceText == true){
+      juiceText.destroy()
+      showJuiceText = false
+    }
+  }
 
-  // text.setText([
-  //   //'Click to restart the Timer',
-  //   'Event.progress: ' + progress.toString().substr(0, 4)
-  // ]);
-  //console.log(progress += 1)
-
-}
-
-function onEvent (self){
-    //image.rotation += 0.04;
-
-  c++;
-  console.log(c)
-
-  if(c % 2 == 1){
-    self.ship.setTint(0xE0FF00);
-  } else {
-    self.ship.setTint(0x0000ff);
+  if (playerPaused == true){
+    if(showPausedText == false ){
+      pausedText.setText('PAUSED FOR  ' +  p);
+    } else if (showPausedText == true){
+      pausedText.destroy()
+      showPausedText = false
+    }
   }
 
 
-  if (c === 10){
+}
+// function enemyFollows (self) {
+//   this.physics.moveToObject(self.potato, self.ship, 100);
+// }
+function onStart () {
+  potatoMove = true
+
+  start--
+  
+  
+  // if(start == 0){
+  //   potaotStartTimedEvent.remove(false);
+  //   potatoMove = true
+  // }
+   
+}
+
+function onVisible (self){
+  p--
+  potatoMove = false
+  hasPotato = true
+
+  if( p == 5){
+    playerPaused = true
+    self.explosion = explosions.get().setActive( true );
+    self.explosion.setOrigin( 0.5, 0.5 );
+    self.explosion.x = self.ship.x;
+    self.explosion.y = self.ship.y;
+    self.explosion.play( 'explode' );
+    self.physics.pause()
+  }
+
+  if(p <= 5 && p % 2 == 1){
+    self.ship.setVisible(false)
+  } else {
+    self.ship.setVisible(true)
+  }
+
+
+
+  if (p === 0){
+    potatoVisibleTimedEvent.remove(false);
+    self.potato.setVisible(true)
+    //potatoVisibilityTimerDone = true
+    self.physics.resume()
+    showPausedText = true
+    p = 15
+    potatoMove = true
+    hasPotato = false
+  }
+}
+
+function onEvent (self){
+  
+  c--;
+  
+ 
+  
+  if (c === 0){
     potaotTimedEvent.remove(false);
     showPotatoText = true
-    self.ship.setTint(0xff0000)
-    //self.physics.pause();
     
-
-    c = 0
-    //self.socket.emit('sandwichCollected');
+    c = 10
+    
   }
 }
 
 function onSandwich (self){
-  s++;
-  console.log(s)
+  s--;
   playerSpeed = 900
-
-
-  if(s % 2 == 1){ 
-    self.ship.setTint(0xE0FF00);
-  } else {
-    self.ship.setTint(0x0000ff);
-  }
-
-
-  if (s === 10){
+  hasSandwich = true
+  hasSandwich = true
+  if (s === 0){
     sandwichTimedEvent.remove(false);
     showSandwichText = true
-    self.ship.setTint(0xff0000)
+    // self.sandwich.setVisible(true)
     playerSpeed = 150
-    s = 0
-    //self.socket.emit('sandwichCollected');
-    
-    //self.socket.emit('sandwichCollected');
+    s = 10
+    self.sandwich.setVisible(true)
+    hasSandwich = false
   }
 
 }
+  function onJuice (self){
+    
+  
+  
+    
+    hasPotato = false
+   
+    j--;
+    //hasJuice = true
+    if(jc == true){
+      potaotTimedEvent.remove(false);
+      potatoVisibleTimedEvent.remove(false);
+      showPotatoText = true
+      showPausedText = true
+    }
+    
+    potatoMove = false
+    
+   
+    c = 10
+    p = 15
+  
+    self.physics.resume()
+
+    if (j == 0){
+      juiceTimedEvent.remove(false);
+      showJuiceText = true
+      self.physics.resume()
+      j =  10
+      gotJuice = false
+      touchJuice == false
+      hasJuice = false
+      potatoMove = true
+      jc = false
+    }
+  }
 
 
-// function addStar(self, sandwichLocation) {
-//   self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-// }
 
-// function addpotato(self, starLocation) {
-//   self.potato = self.physics.add.image(starLocation.x, starLocation.y, 'potato');
-// }
+
+
 
 function addPlayer(self, playerInfo) {
   self.ship = self.physics.add.image(playerInfo.x, playerInfo.y, 'ship').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-  if (playerInfo.team === 'blue') {
+  if (playerInfo.playerNum == 1) {
     self.ship.setTint(0x0000ff);
-  } else if (playerInfo.team === 'red'){
-    self.ship.setTint(0xff0000);
+  } else if (playerInfo.playerNum == 2) {
+    self.ship.setTint(0xff0000)
+  } else if (playerInfo.playerNum == 3) {
+    self.ship.setTint(0xffe400);
+  } else if (playerInfo.playerNum == 4) {
+    self.ship.setTint(0x00ff51);
   }
   // } else if(playerInfo.team === 'green'){
   //   self.ship.setTint(0xff0000);
@@ -379,22 +688,51 @@ function addPlayer(self, playerInfo) {
   self.ship.setDrag(1);
   self.ship.setAngularDrag(1);
   self.ship.setMaxVelocity(200);
-
  
+}
+
+function stopGame (self){
+  if(player1Score == 50){
+    self.physics.pause()
+    self.player1WinText.setText('Player 1 wins')
+    self.player1WinText.setVisible(true)
+
+  } else if(player2Score == 50){
+    self.physics.pause()
+    self.player2WinText.setText('Player 2 wins')
+    self.player2WinText.setVisible(true)
+
+  } else if (player3Score == 50){
+    self.physics.pause()
+    self.player3WinText.setText('Player 3 wins')
+    self.player3WinText.setVisible(true)
+    
+  } else if (player4Score == 50){
+    self.physics.pause()
+    self.player4WinText.setText('Player 4 wins')
+    self.player4WinText.setVisible(true)
+  }
 }
 
 function addOtherPlayers(self, playerInfo) {
   const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'otherPlayer').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-  if (playerInfo.team === 'blue') {
+  if (playerInfo.playerNum == 1) {
     otherPlayer.setTint(0x0000ff);
-  } else if (playerInfo.team === 'red'){
+  } else if (playerInfo.playerNum == 2) {
     otherPlayer.setTint(0xff0000);
+  } else if (playerInfo.playerNum == 3) {
+    self.ship.setTint(0xffe400);
+  } else if (playerInfo.playerNum == 4){
+    self.ship.setTint(0x00ff51);
   }
-  // } else if(playerInfo.team === 'green'){
-  //   self.ship.setTint(0xff0000);
-  // } else {
-  //   self.ship.setTint(0xff0000);
-  // }
+
   otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
 }
+
+
+
+//make platforms 
+//more stars 
+// make power up invisible acter collection 
+//no stacking
