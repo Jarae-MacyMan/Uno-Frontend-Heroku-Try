@@ -42,7 +42,11 @@ var juiceCollider;
 var player1Score;
 var player2Score;
 var player3Score;
-var player4Score; //let redScoreText
+var player4Score;
+var player1WinText;
+var player2WinText;
+var player3WinText;
+var player4WinText; //let redScoreText
 
 var game = new Phaser.Game({
   type: Phaser.AUTO,
@@ -194,6 +198,26 @@ function create() {
       this.socket.emit('starTenCollected');
     }, null, self);
   });
+  this.player1WinText = this.add.text(700, 400, {
+    fontSize: '100px',
+    fill: '#0000FF'
+  });
+  this.player1WinText.setVisible(false);
+  this.player2WinText = this.add.text(700, 400, {
+    fontSize: '100px',
+    fill: '#FF0000'
+  });
+  this.player2WinText.setVisible(false);
+  this.player3WinText = this.add.text(700, 400, {
+    fontSize: '100px',
+    fill: '#FFE400'
+  });
+  this.player3WinText.setVisible(false);
+  this.player4WinText = this.add.text(700, 400, {
+    fontSize: '100px',
+    fill: '#FFE400'
+  });
+  this.player4WinText.setVisible(false);
   this.player1ScoreText = this.add.text(16, 16, 'Player:', {
     fontSize: '32px',
     fill: '#0000FF'
@@ -446,15 +470,7 @@ function update() {
       pausedText.destroy();
       showPausedText = false;
     }
-  } //sandwichText.setText('Event.progress: ' + sandwichTimedEvent.getProgress().toString().substr(0, 4));
-  //console.log(text)
-  // var progress = timedEvent.getProgress();
-  // text.setText([
-  //   //'Click to restart the Timer',
-  //   'Event.progress: ' + progress.toString().substr(0, 4)
-  // ]);
-  //console.log(progress += 1)
-
+  }
 } // function enemyFollows (self) {
 //   this.physics.moveToObject(self.potato, self.ship, 100);
 // }
@@ -581,14 +597,22 @@ function addPlayer(self, playerInfo) {
 }
 
 function stopGame(self) {
-  if (player1Score == 150) {
+  if (player1Score == 50) {
     self.physics.pause();
-  } else if (player2Score == 150) {
+    self.player1WinText.setText('Player 1 wins');
+    self.player1WinText.setVisible(true);
+  } else if (player2Score == 50) {
     self.physics.pause();
-  } else if (player3Score == 150) {
+    self.player2WinText.setText('Player 2 wins');
+    self.player2WinText.setVisible(true);
+  } else if (player3Score == 50) {
     self.physics.pause();
-  } else if (player4Score == 150) {
+    self.player3WinText.setText('Player 3 wins');
+    self.player3WinText.setVisible(true);
+  } else if (player4Score == 50) {
     self.physics.pause();
+    self.player4WinText.setText('Player 4 wins');
+    self.player4WinText.setVisible(true);
   }
 }
 

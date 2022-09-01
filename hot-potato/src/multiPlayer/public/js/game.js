@@ -69,6 +69,12 @@ let player3Score
 let player4Score
 
 
+let player1WinText
+let player2WinText
+let player3WinText
+let player4WinText
+
+
 //let redScoreText
 var game = new Phaser.Game({
   type: Phaser.AUTO,
@@ -108,6 +114,8 @@ function preload() {
     frameWidth: 128,
     frameHeight: 128
   });
+
+  
 }
 
 
@@ -272,7 +280,18 @@ function create() {
 
 
 
+    this.player1WinText = this.add.text(700, 400, { fontSize: '100px', fill: '#0000FF' })
+    this.player1WinText.setVisible(false)
 
+    this.player2WinText = this.add.text(700, 400, { fontSize: '100px', fill: '#FF0000' })
+    this.player2WinText.setVisible(false)
+    
+    this.player3WinText = this.add.text(700, 400, { fontSize: '100px', fill: '#FFE400' })
+    this.player3WinText.setVisible(false)
+
+    this.player4WinText = this.add.text(700, 400, { fontSize: '100px', fill: '#FFE400' })
+    this.player4WinText.setVisible(false)
+    
 
   this.player1ScoreText = this.add.text(16, 16, 'Player:', { fontSize: '32px', fill: '#0000FF' });
   this.player2ScoreText  = this.add.text(250, 16, 'Player:', { fontSize: '32px', fill: '#FF0000' });
@@ -280,6 +299,7 @@ function create() {
   this.player4ScoreText = this.add.text(700, 16, 'Player:', { fontSize: '32px', fill: '#00FF51' });
 
   
+
   this.socket.on('playerScoreUpdate', function (arg) {
     const {theScore, playerNum} = arg
     if (playerNum == 1) {
@@ -522,16 +542,7 @@ function update() {
       showPausedText = false
     }
   }
-  //sandwichText.setText('Event.progress: ' + sandwichTimedEvent.getProgress().toString().substr(0, 4));
 
-  //console.log(text)
-  // var progress = timedEvent.getProgress();
-
-  // text.setText([
-  //   //'Click to restart the Timer',
-  //   'Event.progress: ' + progress.toString().substr(0, 4)
-  // ]);
-  //console.log(progress += 1)
 
 }
 // function enemyFollows (self) {
@@ -681,17 +692,25 @@ function addPlayer(self, playerInfo) {
 }
 
 function stopGame (self){
-  if(player1Score == 150){
+  if(player1Score == 50){
     self.physics.pause()
+    self.player1WinText.setText('Player 1 wins')
+    self.player1WinText.setVisible(true)
 
-  } else if(player2Score == 150){
+  } else if(player2Score == 50){
     self.physics.pause()
+    self.player2WinText.setText('Player 2 wins')
+    self.player2WinText.setVisible(true)
 
-  } else if (player3Score == 150){
+  } else if (player3Score == 50){
     self.physics.pause()
+    self.player3WinText.setText('Player 3 wins')
+    self.player3WinText.setVisible(true)
     
-  } else if (player4Score == 150){
+  } else if (player4Score == 50){
     self.physics.pause()
+    self.player4WinText.setText('Player 4 wins')
+    self.player4WinText.setVisible(true)
   }
 }
 
