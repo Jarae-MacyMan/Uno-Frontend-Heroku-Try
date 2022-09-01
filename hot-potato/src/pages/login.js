@@ -1,7 +1,8 @@
 import { Link, useNavigate} from 'react-router-dom';
 import Context from '../context/Context';
 import React from 'react';
-
+import {Button, Input, Label, FormGroup, Form} from 'reactstrap'
+import "../style/login.css"
 function Login(){
     const navigate = useNavigate();
     const [playerInfo, setPlayerInfo] = React.useState({});
@@ -53,24 +54,23 @@ function Login(){
     }, [playerInfo])
 
     return (
-        <div>
+        <div className='form-container2'>
             <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Username</label>
-                    <input name='username' type="username" placeholder='Enter Username'/>
-                </div>
-                <div>
-                    <label>Password</label>
-                    <input name="password" type="password" placeholder='Enter Password'/>
-                </div>
-                <button type='submit'> Submit </button>
-            </form>
-            <span>
-                <Link to="/signup">SignUp</Link>
-                <Link to="/home">Home</Link>
-                <Link to="Waiting-Room/194">Waiting Room 194</Link>
-            </span>
+          
+            <Form inline onSubmit={handleSubmit} className='form'>
+            <FormGroup className="mb-2 me-sm-2 mb-sm-0 input">
+              <Label className="me-sm-2" for="exampleEmail"> Username </Label>
+              <Input  name="username" placeholder="Enter your username" type="username"/>
+            </FormGroup>
+            <FormGroup className="mb-2 me-sm-2 mb-sm-0 input">
+              <Label className="me-sm-2" for="examplePassword"> Password </Label>
+              <Input name="password" placeholder="Enter password" type="password"/>
+            </FormGroup>
+            <div className='btn'>
+            <p>Not a user yet? <Link to="/signup" className='link'>Signup</Link></p>
+            <Button  type='submit'>Submit</Button>
+            </div>
+          </Form> 
         </div>
     )
 }
