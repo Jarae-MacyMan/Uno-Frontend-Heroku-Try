@@ -63,6 +63,12 @@ let jc = false
 
 let juiceCollider
 
+let player1Score
+let player2Score
+let player3Score
+let player4Score
+
+
 //let redScoreText
 var game = new Phaser.Game({
   type: Phaser.AUTO,
@@ -163,6 +169,8 @@ function create() {
       if (self.starTwo) self.starTwo.destroy();
       self.starTwo = self.physics.add.image(starTwoLocation.x, starTwoLocation.y, 'star2');
       self.physics.add.overlap(self.ship, self.starTwo, function () {
+        console.log(2)
+
         this.socket.emit('starTwoCollected');
       }, null, self);
      
@@ -173,6 +181,8 @@ function create() {
       if (self.starThree) self.starThree.destroy();
       self.starThree = self.physics.add.image(starThreeLocation.x, starThreeLocation.y, 'star2');
       self.physics.add.overlap(self.ship, self.starThree, function () {
+        console.log(3)
+
         this.socket.emit('starThreeCollected');
       }, null, self);
      
@@ -181,72 +191,84 @@ function create() {
     this.socket.on('starFourLocation', function (starFourLocation) {
    
       if (self.starFour) self.starFour.destroy();
-      self.starFour = self.physics.add.image(starFourLocation.x, starFourLocation.y, 'star');
+      self.starFour = self.physics.add.image(starFourLocation.x, starFourLocation.y, 'star2');
       self.physics.add.overlap(self.ship, self.starFour, function () {
+        console.log(4)
+
         this.socket.emit('starFourCollected');
       }, null, self);
      
     });
 
-    // this.socket.on('starFiveLocation', function (starFiveLocation) {
+    this.socket.on('starFiveLocation', function (starFiveLocation) {
    
-    //   if (self.starFive) self.starFive.destroy();
-    //   self.starFive = self.physics.add.image(starFiveLocation.x, starFiveLocation.y, 'star2');
-    //   self.physics.add.overlap(self.ship, self.starFive, function () {
-    //     this.socket.emit('starFiveCollected');
-    //   }, null, self);
-     
-    // });
+      if (self.starFive) self.starFive.destroy();
+      self.starFive = self.physics.add.image(starFiveLocation.x, starFiveLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starFive, function () {
+        console.log(5)
 
-    // this.socket.on('starSixLocation', function (starSixLocation) {
-   
-    //   if (self.starSix) self.starSix.destroy();
-    //   self.starSix = self.physics.add.image(starSixLocation.x, starSixLocation.y, 'star2');
-    //   self.physics.add.overlap(self.ship, self.starSix, function () {
-    //     this.socket.emit('starSixCollected');
-    //   }, null, self);
+        this.socket.emit('starFiveCollected');
+      }, null, self);
      
-    // });
+    });
 
-    // this.socket.on('starSevenLocation', function (starSevenLocation) {
+    this.socket.on('starSixLocation', function (starSixLocation) {
    
-    //   if (self.starSeven) self.starSeven.destroy();
-    //   self.starSeven = self.physics.add.image(starSevenLocation.x, starSevenLocation.y, 'star2');
-    //   self.physics.add.overlap(self.ship, self.starSeven, function () {
-    //     this.socket.emit('starSevenCollected');
-    //   }, null, self);
-     
-    // });
+      if (self.starSix) self.starSix.destroy();
+      self.starSix = self.physics.add.image(starSixLocation.x, starSixLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starSix, function () {
+        console.log(6)
 
-    // this.socket.on('starEightLocation', function (starEightLocation) {
-   
-    //   if (self.starEight) self.starEight.destroy();
-    //   self.starEight = self.physics.add.image(starEightLocation.x, starEightLocation.y, 'star2');
-    //   self.physics.add.overlap(self.ship, self.starEight, function () {
-    //     this.socket.emit('starEightCollected');
-    //   }, null, self);
+        this.socket.emit('starSixCollected');
+      }, null, self);
      
-    // });
+    });
 
-    // this.socket.on('starNineLocation', function (starNineLocation) {
+    this.socket.on('starSevenLocation', function (starSevenLocation) {
    
-    //   if (self.starNine) self.starNine.destroy();
-    //   self.starNine = self.physics.add.image(starNineLocation.x, starNineLocation.y, 'star2');
-    //   self.physics.add.overlap(self.ship, self.starNine, function () {
-    //     this.socket.emit('starNineCollected');
-    //   }, null, self);
+      if (self.starSeven) self.starSeven.destroy();
+      self.starSeven = self.physics.add.image(starSevenLocation.x, starSevenLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starSeven, function () {
+        console.log(7)
+        this.socket.emit('starSevenCollected');
+      }, null, self);
      
-    // });
+    });
 
-    // this.socket.on('starTenLocation', function (starTenLocation) {
+    this.socket.on('starEightLocation', function (starEightLocation) {
    
-    //   if (self.starTen) self.starTen.destroy();
-    //   self.starTen = self.physics.add.image(starTenLocation.x, starTenLocation.y, 'star2');
-    //   self.physics.add.overlap(self.ship, self.starTen, function () {
-    //     this.socket.emit('starThreeCollected');
-    //   }, null, self);
+      if (self.starEight) self.starEight.destroy();
+      self.starEight = self.physics.add.image(starEightLocation.x, starEightLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starEight, function () {
+        console.log(8)
+        this.socket.emit('starEightCollected');
+      }, null, self);
      
-    // });
+    });
+
+    this.socket.on('starNineLocation', function (starNineLocation) {
+   
+      if (self.starNine) self.starNine.destroy();
+      self.starNine = self.physics.add.image(starNineLocation.x, starNineLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starNine, function () {
+        console.log(9)
+
+        this.socket.emit('starNineCollected');
+      }, null, self);
+     
+    });
+
+    this.socket.on('starTenLocation', function (starTenLocation) {
+   
+      if (self.starTen) self.starTen.destroy();
+      self.starTen = self.physics.add.image(starTenLocation.x, starTenLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starTen, function () {
+        console.log(10)
+
+        this.socket.emit('starTenCollected');
+      }, null, self);
+     
+    });
 
 
 
@@ -262,12 +284,20 @@ function create() {
     const {theScore, playerNum} = arg
     if (playerNum == 1) {
       self.player1ScoreText.setText('Player' + playerNum + ':' + theScore);
+      player1Score = theScore
+      stopGame(self)
     } else if (playerNum == 2) {
       self.player2ScoreText.setText('Player' + playerNum + ': ' + theScore);
+      player2Score = theScore
+      stopGame(self)
     } else if (playerNum == 3) {
       self.player3ScoreText.setText('Player' + playerNum + ': ' + theScore);
+      player3Score = theScore
+      stopGame(self)
     } else if (playerNum == 4) {
       self.player4ScoreText.setText('Player' + playerNum + ': ' + theScore);
+      player4Score = theScore
+      stopGame(self)
     }
   });
 
@@ -650,6 +680,21 @@ function addPlayer(self, playerInfo) {
  
 }
 
+function stopGame (self){
+  if(player1Score == 150){
+    self.physics.pause()
+
+  } else if(player2Score == 150){
+    self.physics.pause()
+
+  } else if (player3Score == 150){
+    self.physics.pause()
+    
+  } else if (player4Score == 150){
+    self.physics.pause()
+  }
+}
+
 function addOtherPlayers(self, playerInfo) {
   const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'otherPlayer').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
   if (playerInfo.playerNum == 1) {
@@ -665,6 +710,8 @@ function addOtherPlayers(self, playerInfo) {
   otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
 }
+
+
 
 //make platforms 
 //more stars 

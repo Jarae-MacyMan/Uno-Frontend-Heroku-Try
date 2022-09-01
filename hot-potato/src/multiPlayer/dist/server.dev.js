@@ -168,9 +168,9 @@ io.on('connection', function (socket) {
       players[socket.id].playerScore += 10;
     }
 
-    star.x = Math.floor(Math.random() * 1350) + 50;
-    star.y = Math.floor(Math.random() * 700) + 50;
-    io.emit('starTwoLocation', star);
+    starTwo.x = Math.floor(Math.random() * 1350) + 50;
+    starTwo.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('starTwoLocation', starTwo);
     io.emit('playerScoreUpdate', {
       theScore: players[socket.id].playerScore,
       playerNum: players[socket.id].playerNum
@@ -187,9 +187,9 @@ io.on('connection', function (socket) {
       players[socket.id].playerScore += 10;
     }
 
-    star.x = Math.floor(Math.random() * 1350) + 50;
-    star.y = Math.floor(Math.random() * 700) + 50;
-    io.emit('starThreeLocation', star);
+    starThree.x = Math.floor(Math.random() * 1350) + 50;
+    starThree.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('starThreeLocation', starThree);
     io.emit('playerScoreUpdate', {
       theScore: players[socket.id].playerScore,
       playerNum: players[socket.id].playerNum
@@ -206,10 +206,10 @@ io.on('connection', function (socket) {
       players[socket.id].playerScore += 10;
     }
 
-    star.x = Math.floor(Math.random() * 1350) + 50;
-    star.y = Math.floor(Math.random() * 700) + 50;
-    io.emit('starFourLocation', star);
-    io.emit('playerFourScoreUpdate', {
+    starFour.x = Math.floor(Math.random() * 1350) + 50;
+    starFour.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('starFourLocation', starFour);
+    io.emit('playerScoreUpdate', {
       theScore: players[socket.id].playerScore,
       playerNum: players[socket.id].playerNum
     });
@@ -225,9 +225,9 @@ io.on('connection', function (socket) {
       players[socket.id].playerScore += 10;
     }
 
-    star.x = Math.floor(Math.random() * 1350) + 50;
-    star.y = Math.floor(Math.random() * 700) + 50;
-    io.emit('starFiveLocation', star);
+    starFive.x = Math.floor(Math.random() * 1350) + 50;
+    starFive.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('starFiveLocation', starFive);
     io.emit('playerScoreUpdate', {
       theScore: players[socket.id].playerScore,
       playerNum: players[socket.id].playerNum
@@ -244,9 +244,9 @@ io.on('connection', function (socket) {
       players[socket.id].playerScore += 10;
     }
 
-    star.x = Math.floor(Math.random() * 1350) + 50;
-    star.y = Math.floor(Math.random() * 700) + 50;
-    io.emit('starSixLocation', star);
+    starSix.x = Math.floor(Math.random() * 1350) + 50;
+    starSix.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('starSixLocation', starSix);
     io.emit('playerScoreUpdate', {
       theScore: players[socket.id].playerScore,
       playerNum: players[socket.id].playerNum
@@ -263,9 +263,9 @@ io.on('connection', function (socket) {
       players[socket.id].playerScore += 10;
     }
 
-    star.x = Math.floor(Math.random() * 1350) + 50;
-    star.y = Math.floor(Math.random() * 700) + 50;
-    io.emit('starSevenLocation', star);
+    starSeven.x = Math.floor(Math.random() * 1350) + 50;
+    starSeven.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('starSevenLocation', starSeven);
     io.emit('playerScoreUpdate', {
       theScore: players[socket.id].playerScore,
       playerNum: players[socket.id].playerNum
@@ -282,9 +282,9 @@ io.on('connection', function (socket) {
       players[socket.id].playerScore += 10;
     }
 
-    star.x = Math.floor(Math.random() * 1350) + 50;
-    star.y = Math.floor(Math.random() * 700) + 50;
-    io.emit('starEightLocation', star);
+    starEight.x = Math.floor(Math.random() * 1350) + 50;
+    starEight.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('starEightLocation', starEight);
     io.emit('playerScoreUpdate', {
       theScore: players[socket.id].playerScore,
       playerNum: players[socket.id].playerNum
@@ -301,9 +301,9 @@ io.on('connection', function (socket) {
       players[socket.id].playerScore += 10;
     }
 
-    star.x = Math.floor(Math.random() * 1350) + 50;
-    star.y = Math.floor(Math.random() * 700) + 50;
-    io.emit('starNineLocation', star);
+    starNine.x = Math.floor(Math.random() * 1350) + 50;
+    starNine.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('starNineLocation', starNine);
     io.emit('playerScoreUpdate', {
       theScore: players[socket.id].playerScore,
       playerNum: players[socket.id].playerNum
@@ -320,10 +320,10 @@ io.on('connection', function (socket) {
       players[socket.id].playerScore += 10;
     }
 
-    star.x = Math.floor(Math.random() * 1350) + 50;
-    star.y = Math.floor(Math.random() * 700) + 50;
-    io.emit('starTenLocation', star);
-    io.emit('playerThreeScoreUpdate', {
+    starTen.x = Math.floor(Math.random() * 1350) + 50;
+    starTen.y = Math.floor(Math.random() * 700) + 50;
+    io.emit('starTenLocation', starTen);
+    io.emit('playerScoreUpdate', {
       theScore: players[socket.id].playerScore,
       playerNum: players[socket.id].playerNum
     });
