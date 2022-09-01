@@ -1,21 +1,4 @@
-var config = {
-  type: Phaser.AUTO,
-  parent: 'phaser-example',
-  width: 1422,
-  height: 800,
-  physics: {
-    default: 'arcade',
-    arcade: {
-      debug: false,
-      gravity: { y: 0 }
-    }
-  },
-  scene: {
-    preload: preload,
-    create: create,
-    update: update
-  } 
-};
+
 
 //let timedEvent2;
 let potatoVisibilityTimerDone = false
@@ -43,7 +26,7 @@ let showSandwichText = false
 let touchJuice = false 
 let gotJuice = false
 let juiceText
-let juiceTimedEvent;
+let juiceTimedEvent
 let showJuiceText = false 
 
 let pausedText
@@ -58,8 +41,8 @@ var explosions;
 
 var c = 10;
 var s = 10
-var j = 10
 var p = 15
+var j = 10
 
 let potaotStartTimedEvent;
 var start = 3
@@ -69,8 +52,39 @@ var start = 3
 
 let potatoVisibleTimedEvent;
 
+
+let hasJuice = false  //no stack
+let hasSandwich = false
+let hasPotato = false
+
+//movement after juice
+let jc = false
+
+
+let juiceCollider
+
 //let redScoreText
-var game = new Phaser.Game(config);
+var game = new Phaser.Game({
+  type: Phaser.AUTO,
+  parent: 'phaser-example',
+  width: 1422,
+  height: 800,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      debug: false,
+      gravity: { y: 0 }
+    }
+  },
+  scene: {
+    preload: preload,
+    create: create,
+    update: update
+  } 
+});
+
+
+
 function preload() {
   this.load.image('sky', 'assets/city3.png');
 
@@ -87,10 +101,10 @@ function preload() {
   this.load.spritesheet( 'kaboom', 'assets/explode.png', {
     frameWidth: 128,
     frameHeight: 128
-});
-
-
+  });
 }
+
+
 function create() {
   //this.add.image(700, 300, 'sky').setScale(2);
 
@@ -154,25 +168,107 @@ function create() {
      
     });
 
-
-    // this.socket.on('star3Location', function (star3Location) {
+    this.socket.on('starThreeLocation', function (starThreeLocation) {
    
-    //   if (self.star3) self.star3.destroy();
-    //   self.star3 = self.physics.add.image(star3Location.x, star3Location.y, 'star');
-    //   self.physics.add.overlap(self.ship, self.star3, function () {
-    //     this.socket.emit('star3Collected');
+      if (self.starThree) self.starThree.destroy();
+      self.starThree = self.physics.add.image(starThreeLocation.x, starThreeLocation.y, 'star2');
+      self.physics.add.overlap(self.ship, self.starThree, function () {
+        this.socket.emit('starThreeCollected');
+      }, null, self);
+     
+    });
+
+    this.socket.on('starFourLocation', function (starFourLocation) {
+   
+      if (self.starFour) self.starFour.destroy();
+      self.starFour = self.physics.add.image(starFourLocation.x, starFourLocation.y, 'star');
+      self.physics.add.overlap(self.ship, self.starFour, function () {
+        this.socket.emit('starFourCollected');
+      }, null, self);
+     
+    });
+
+    // this.socket.on('starFiveLocation', function (starFiveLocation) {
+   
+    //   if (self.starFive) self.starFive.destroy();
+    //   self.starFive = self.physics.add.image(starFiveLocation.x, starFiveLocation.y, 'star2');
+    //   self.physics.add.overlap(self.ship, self.starFive, function () {
+    //     this.socket.emit('starFiveCollected');
     //   }, null, self);
      
     // });
 
-  this.blueScoreText = this.add.text(16, 16, 'Blue:', { fontSize: '32px', fill: '#0000FF' });
-  this.redScoreText = this.add.text(550, 16, 'Red:', { fontSize: '32px', fill: '#FF0000' });
- 
-  
-  this.socket.on('scoreUpdate', function (scores) {
-    self.blueScoreText.setText('Blue: ' + scores.blue);
-    self.redScoreText.setText('Red: ' + scores.red);
+    // this.socket.on('starSixLocation', function (starSixLocation) {
    
+    //   if (self.starSix) self.starSix.destroy();
+    //   self.starSix = self.physics.add.image(starSixLocation.x, starSixLocation.y, 'star2');
+    //   self.physics.add.overlap(self.ship, self.starSix, function () {
+    //     this.socket.emit('starSixCollected');
+    //   }, null, self);
+     
+    // });
+
+    // this.socket.on('starSevenLocation', function (starSevenLocation) {
+   
+    //   if (self.starSeven) self.starSeven.destroy();
+    //   self.starSeven = self.physics.add.image(starSevenLocation.x, starSevenLocation.y, 'star2');
+    //   self.physics.add.overlap(self.ship, self.starSeven, function () {
+    //     this.socket.emit('starSevenCollected');
+    //   }, null, self);
+     
+    // });
+
+    // this.socket.on('starEightLocation', function (starEightLocation) {
+   
+    //   if (self.starEight) self.starEight.destroy();
+    //   self.starEight = self.physics.add.image(starEightLocation.x, starEightLocation.y, 'star2');
+    //   self.physics.add.overlap(self.ship, self.starEight, function () {
+    //     this.socket.emit('starEightCollected');
+    //   }, null, self);
+     
+    // });
+
+    // this.socket.on('starNineLocation', function (starNineLocation) {
+   
+    //   if (self.starNine) self.starNine.destroy();
+    //   self.starNine = self.physics.add.image(starNineLocation.x, starNineLocation.y, 'star2');
+    //   self.physics.add.overlap(self.ship, self.starNine, function () {
+    //     this.socket.emit('starNineCollected');
+    //   }, null, self);
+     
+    // });
+
+    // this.socket.on('starTenLocation', function (starTenLocation) {
+   
+    //   if (self.starTen) self.starTen.destroy();
+    //   self.starTen = self.physics.add.image(starTenLocation.x, starTenLocation.y, 'star2');
+    //   self.physics.add.overlap(self.ship, self.starTen, function () {
+    //     this.socket.emit('starThreeCollected');
+    //   }, null, self);
+     
+    // });
+
+
+
+
+
+  this.player1ScoreText = this.add.text(16, 16, 'Player:', { fontSize: '32px', fill: '#0000FF' });
+  this.player2ScoreText  = this.add.text(250, 16, 'Player:', { fontSize: '32px', fill: '#FF0000' });
+  this.player3ScoreText = this.add.text(450, 16, 'Player:', { fontSize: '32px', fill: '#FFE400' });
+  this.player4ScoreText = this.add.text(700, 16, 'Player:', { fontSize: '32px', fill: '#00FF51' });
+
+  
+  this.socket.on('playerScoreUpdate', function (arg) {
+    const {theScore, playerNum} = arg
+    if (playerNum == 1) {
+      self.player1ScoreText.setText('Player' + playerNum + ':' + theScore);
+    } else if (playerNum == 2) {
+      self.player2ScoreText.setText('Player' + playerNum + ': ' + theScore);
+    } else if (playerNum == 3) {
+      self.player3ScoreText.setText('Player' + playerNum + ': ' + theScore);
+    } else if (playerNum == 4) {
+      self.player4ScoreText.setText('Player' + playerNum + ': ' + theScore);
+    }
   });
 
 
@@ -182,35 +278,30 @@ function create() {
       if (self.potato) self.potato.destroy();
       self.potato = self.physics.add.image(potatoLocation.x, potatoLocation.y, 'potato').setScale(.2)
 
-      //if(potatoVisibilityTimerDone == false){
-
-        //self.potato.setVisible(false)
-        //self.potato.setVelocityX(0);
-        //self.potato.body.stop()
+     
  
         self.physics.add.overlap(self.ship, self.potato, function () {
 
             this.socket.emit('potatoCollected');
 
             if (gotJuice == false){
-            touchPo = true
-            potatoMove = false
+            
+           
+            jc = true
             //adds text and initiats timer 
-            potatoText = this.add.text(1100, 20);
-            potaotTimedEvent = this.time.addEvent({ delay: 500, callback: () => onEvent(self),  callbackScope: this, loop: true }); 
-            
-            
-            pausedText = this.add.text(1100, 40);
-             //self.showPausedTextsetVisible(false)
-            potatoVisibleTimedEvent = this.time.addEvent({ delay: 500, callback: () => onVisible(self),  callbackScope: this, loop: true });  
-
+            if(hasPotato == false ){
+              touchPo = true
+              potatoMove = false
+              potatoText = this.add.text(1100, 20);
+              potaotTimedEvent = this.time.addEvent({ delay: 500, callback: () => onEvent(self),  callbackScope: this, loop: true }); 
+           
+              pausedText = this.add.text(1100, 40);
+              potatoVisibleTimedEvent = this.time.addEvent({ delay: 500, callback: () => onVisible(self),  callbackScope: this, loop: true });  
+            }
           } 
           
         }, null, self);
 
-          
-        //}
-      //}
     });
 
     potaotStartTimedEvent = this.time.addEvent({ delay: 3000, callback: () => onStart(self), callbackScope: this, loop: true});
@@ -222,14 +313,18 @@ function create() {
     if (self.sandwich) self.sandwich.destroy();
     self.sandwich = self.physics.add.image(sandwichLocation.x, sandwichLocation.y, 'sandwich').setScale(.1)
     self.physics.add.collider(self.ship, self.sandwich, function () {
+      self.sandwich.setVisible(false)
       this.socket.emit('sandwichCollected');
       
       
       touchSandwich = true
+      //hasSandwich = true 
+      //self.sandwich.setVisible(false)
       
-      sandwichText = this.add.text(1100, 60);
-      sandwichTimedEvent = this.time.addEvent({ delay: 500, callback: () => onSandwich(self), callbackScope: this, loop: true});
-      //console.log()  
+      if(hasSandwich == false ){
+        sandwichText = this.add.text(1100, 60);
+        sandwichTimedEvent = this.time.addEvent({ delay: 500, callback: () => onSandwich(self), callbackScope: this, loop: true});
+      } 
         
     }, null, self);
       
@@ -242,13 +337,14 @@ function create() {
       this.socket.emit('juiceCollected');
 
       touchJuice = true
-
       gotJuice = true
+      
       self.juice.setVisible(false)
 
-      juiceText = this.add.text(1100, 80);
-      juiceTimedEvent = this.time.addEvent({ delay: 500, callback: () => onJuice(self), callbackScope: this, loop: true});
-      
+      if(hasJuice == false){
+        juiceText = this.add.text(1100, 80);
+        juiceTimedEvent = this.time.addEvent({ delay: 500, callback: () => onJuice(self), callbackScope: this, loop: true});
+      }
     }, null, self);
   });
 
@@ -267,28 +363,11 @@ function create() {
     defaultKey: 'kaboom',
     maxSize: 30
   })
-      
     
-  // stars = this.physics.add.group({
-  //   key: 'sandwich',
-  //   repeat: 20,
-  //   setXY: { x: 12, y: 0, stepX: 70 }
-  // });
-  // if(self.ship){
-  // console.log(self.ship)
-  // }
-
-  // console.log(self.otherPlayers)
 }
 
 
-
-
-
-
-
-
-
+/////////////////////////////////////////
 
 function update() {
 
@@ -315,7 +394,7 @@ function update() {
     // } else {
     //   this.ship.setAcceleration(0);
     // }
-  
+    this.ship.body.velocity.normalize().scale(150)
     this.physics.world.wrap(this.ship, 5);
     this.physics.world.wrap(this.potato, 5);
 
@@ -334,19 +413,21 @@ function update() {
       rotation: this.ship.rotation
     };
 
-    if( potatoMove == true) {
-    let px = this.potato.x;
-    let py = this.potato.y;
-    var pr = this.potato.rotation;
+    if( potatoMove == true && hasPotato == false ) {
+      let px = this.potato.x;
+      let py = this.potato.y;
+      var pr = this.potato.rotation;
 
-    var dx = this.ship.x - px;
-    var dy = this.ship.y - py;
-    
-    if (Math.abs(dx) < 1422 && Math.abs(dx) < 800 ) {
-      this.potato.setVelocityX(Math.sign(dx) * 150);
-      this.potato.setVelocityY(Math.sign(dy) * 150);
+      var dx = this.ship.x - px;
+      var dy = this.ship.y - py;
+      
+      if (Math.abs(dx) < 1422 && Math.abs(dx) < 800 ) {
+        this.potato.setVelocityX(Math.sign(dx) * 150);
+        this.potato.setVelocityY(Math.sign(dy) * 150);
+      }
+      this.potato.body.velocity.normalize().scale(150)
+
     }
-  }
 
   // if (this.potato.oldPosition && (px !== this.potato.oldPosition.x || py !== this.potato.oldPosition.y)) {
   //   this.socket.emit('potatoLocation', { x: this.potato.x, y: this.potato.y });
@@ -377,7 +458,7 @@ function update() {
   //console.log(potatoVisibleTimedEvent.getProgress().toString().substr(0, 4));
 
   //updtes the boerd to wait unitl a person touches the potato to start timer 
-  if(touchPo == true){
+  if(touchPo == true ){
     if(showPotatoText == false ){
       potatoText.setText('PAUSED IN ' + c);
     } else if (showPotatoText == true){
@@ -430,7 +511,7 @@ function onStart () {
   potatoMove = true
 
   start--
-  console.log(start)
+  
   
   // if(start == 0){
   //   potaotStartTimedEvent.remove(false);
@@ -442,6 +523,7 @@ function onStart () {
 function onVisible (self){
   p--
   potatoMove = false
+  hasPotato = true
 
   if( p == 5){
     playerPaused = true
@@ -453,6 +535,14 @@ function onVisible (self){
     self.physics.pause()
   }
 
+  if(p <= 5 && p % 2 == 1){
+    self.ship.setVisible(false)
+  } else {
+    self.ship.setVisible(true)
+  }
+
+
+
   if (p === 0){
     potatoVisibleTimedEvent.remove(false);
     self.potato.setVisible(true)
@@ -461,104 +551,93 @@ function onVisible (self){
     showPausedText = true
     p = 15
     potatoMove = true
-    //self.ship.body.stop()
-    //self.ship.setVelocityY(0);
-    //potatoVisibilityTimerDone == true
+    hasPotato = false
   }
 }
 
 function onEvent (self){
-    //image.rotation += 0.04;
   
-  //potatoVisibility++
   c--;
-  potatoMove = false
-  //self.potato.setVisible(false)
-  //console.log(c)
+  
+ 
   
   if (c === 0){
     potaotTimedEvent.remove(false);
     showPotatoText = true
-    potatoMove = true
-    //self.physics.pause();
-    //self.potato.setVisible(true)
-    //self.physics.potato.pause()
+    
     c = 10
     
-    //self.socket.emit('sandwichCollected');
   }
 }
 
 function onSandwich (self){
   s--;
-  //console.log(s)
   playerSpeed = 900
-  self.sandwich.setVisible(false)
-
-  // if(s % 2 == 1){ 
-  //   self.ship.setTint(0xE0FF00);
-  // } else {
-  //   self.ship.setTint(0x0000ff);
-  // }
-
-
+  hasSandwich = true
+  hasSandwich = true
   if (s === 0){
     sandwichTimedEvent.remove(false);
     showSandwichText = true
     // self.sandwich.setVisible(true)
     playerSpeed = 150
     s = 10
-    //self.socket.emit('sandwichCollected');
-    
-    //self.socket.emit('sandwichCollected');
+    self.sandwich.setVisible(true)
+    hasSandwich = false
   }
 
 }
-
-//if (touchJuice = false ){
-
-function onJuice (self){
-  //image.rotation += 0.04;
-  //potatoMove = false
-  j--;
-  potaotTimedEvent.remove(false);
-  potatoVisibleTimedEvent.remove(false);
-  showPotatoText = true
-  showPausedText = true
-  //potatoMove = true
-  c = 10
-  p = 15
- 
-  self.physics.resume()
-
-  if (j == 0){
-    juiceTimedEvent.remove(false);
-    //self.ship.setTint(0xff0000);
-    showJuiceText = true
+  function onJuice (self){
+    
+  
+  
+    
+    hasPotato = false
+   
+    j--;
+    //hasJuice = true
+    if(jc == true){
+      potaotTimedEvent.remove(false);
+      potatoVisibleTimedEvent.remove(false);
+      showPotatoText = true
+      showPausedText = true
+    }
+    
+    potatoMove = false
+    
+   
+    c = 10
+    p = 15
+  
     self.physics.resume()
-    //gotJuice = false
-    potatoMove = true
-    //self.physics.pause();
-    j =  10
-    //self.socket.emit('sandwichCollected');
-    gotJuice = false
-    touchJuice == false
-    
+
+    if (j == 0){
+      juiceTimedEvent.remove(false);
+      showJuiceText = true
+      self.physics.resume()
+      j =  10
+      gotJuice = false
+      touchJuice == false
+      hasJuice = false
+      potatoMove = true
+      jc = false
+    }
   }
-}
-//}
+
+
 
 
 
 
 function addPlayer(self, playerInfo) {
   self.ship = self.physics.add.image(playerInfo.x, playerInfo.y, 'ship').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-  if (playerInfo.team === 'blue') {
+  if (playerInfo.playerNum == 1) {
     self.ship.setTint(0x0000ff);
-    console.log(self.ship)
-  } else if (playerInfo.team === 'red'){
-    self.ship.setTint(0xff0000);
-    console.log(self.ship)
+  } else if (playerInfo.playerNum == 2) {
+    self.ship.setTint(0xff0000)
+  } else if (playerInfo.playerNum == 3) {
+    self.ship.setTint(0xffe400);
+  } else if (playerInfo.playerNum == 4) {
+    self.ship.setTint(0x00ff51);
   }
   // } else if(playerInfo.team === 'green'){
   //   self.ship.setTint(0xff0000);
@@ -573,23 +652,21 @@ function addPlayer(self, playerInfo) {
 
 function addOtherPlayers(self, playerInfo) {
   const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'otherPlayer').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-  if (playerInfo.team === 'blue') {
+  if (playerInfo.playerNum == 1) {
     otherPlayer.setTint(0x0000ff);
-  } else if (playerInfo.team === 'red'){
+  } else if (playerInfo.playerNum == 2) {
     otherPlayer.setTint(0xff0000);
+  } else if (playerInfo.playerNum == 3) {
+    self.ship.setTint(0xffe400);
+  } else if (playerInfo.playerNum == 4){
+    self.ship.setTint(0x00ff51);
   }
-  // } else if(playerInfo.team === 'green'){
-  //   self.ship.setTint(0xff0000);
-  // } else {
-  //   self.ship.setTint(0xff0000);
-  // }
+
   otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
 }
 
-// function collide (self, playerInfo){
-//   if(self){
-
-//   }
-// }
-
+//make platforms 
+//more stars 
+// make power up invisible acter collection 
+//no stacking
