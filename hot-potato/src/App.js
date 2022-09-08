@@ -5,6 +5,7 @@ import Login from './pages/login'
 import SignUp from './pages/signup';
 import Lobby from './pages/main';
 import WaitingRoom from './pages/gameLobby';
+import SocketTest from './components/SocketTest';
 // import gameSocket from './multiPlayer/dist/server.dev';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route exact path='/home' element={<Lobby></Lobby>}/> 
         <Route path='Waiting-Room/:id' element={<WaitingRoom></WaitingRoom>}/>
         {/* <Route  path='/game' element={<gameSocket />}/> */}
+        <Route path='game' element={<SocketTest></SocketTest>}/>
       </Routes>
     </Router>
   );

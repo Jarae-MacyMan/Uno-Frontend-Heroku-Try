@@ -59,10 +59,10 @@ return (
               <Label className="me-sm-2" for="examplePassword"> Password </Label>
               <Input id="examplePassword" name="password" placeholder="Enter password" type="password"/>
             </FormGroup>
-            <div className='btn'>
+            <div className='btn ' >
             <p> Already a player? <Link to="/" className='link'>Login</Link></p>
             
-            <Button  type='submit'>Submit</Button>
+            <button  type='submit'>Submit</button>
             </div>
           </Form> 
         </body>

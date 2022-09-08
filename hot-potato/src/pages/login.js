@@ -68,7 +68,7 @@ function Login(){
             </FormGroup>
             <div className='btn'>
             <p>Not a user yet? <Link to="/signup" className='link'>Signup</Link></p>
-            <Button  type='submit'>Submit</Button>
+            <button  type='submit'>Submit</button>
             </div>
           </Form> 
         </div>

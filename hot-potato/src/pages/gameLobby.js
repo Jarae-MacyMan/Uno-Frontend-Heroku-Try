@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import Context from "../context/Context";
 import NavbarFunc from "./navbar"
+import { Button } from "reactstrap";
 import {CircularProgress} from '@mui/material'
 import "../style/gameLobby.css"
 
@@ -19,10 +20,13 @@ function WaitingRoom (){
     const [ deleteGameInfo, setDeleteGameInfo ] = useState([])
     let [ deleteAttempts, updateDeleteAttempts ] = useState(0)
     let [leaveAttempts, updateLeaveAttempts] = useState(0)
+  
 
     useEffect(() => {
+    
         context.getAllGames().then(gamesList => {
-            updateCurrentGame(gamesList.find(games => games.game_id === params.id))
+            // console.log(gamesList)
+            updateCurrentGame(gamesList.find((games) =>   games.game_id == params.id))
         })
     }, [context.gamesList])
 
@@ -30,7 +34,7 @@ function WaitingRoom (){
         fetch(`http://localhost:3032/games/${params.id}/players`)
         .then(res => res.json())
         .then((data) => {
-        
+      
             //mapping over the data make another fetch call to get the player username set the playerlist
             data.playerList.map((info) => {
                 fetch(`http://localhost:3032/games/${info.game_id}/players/playernames`)
@@ -42,6 +46,8 @@ function WaitingRoom (){
         })
     }, [currentPlayerList])
 
+  
+// console.log(game.room_code) 
 
     const handlePublicClick = event => {
         setIsClicked(!isClicked)
@@ -89,7 +95,7 @@ function WaitingRoom (){
             body: JSON.stringify(delteGameInfo)
         })
         const data = await response.json()
-        
+        console.log(data)
         return data
     }
 
@@ -128,11 +134,12 @@ function WaitingRoom (){
             <NavbarFunc/>
             <div className="header">
             <h2>Waiting room </h2>
-            <div className="game-img" >
+            <p>Your game room code is: {game.room_code}</p>
+            {/* <div className="game-img" >
 
                 <img  src="https://cdna.artstation.com/p/assets/images/images/024/979/396/large/sarath-kumar-nyc-street-day.jpg?1584168680" />
                 <CircularProgress className="overlay" color="inherit" />
-            </div>
+            </div> */}
             </div>
             <div className="friends">
             <h4>Players in the Lobby</h4>
@@ -143,14 +150,15 @@ function WaitingRoom (){
             </div>
             <div className="game-btn">
                 {game.hosted_by === context.userInfo.playerInfo.username && 
-                    <div>
-                        <button>Start</button>
+                    <div style={{paddingRight:'30px'}}>
+                        <button className="waiting-btn"
+                        >Start Game</button>
                         {/* <button onClick={handleCloseClick}>Close</button> */}
                         {/* <button onClick={handlePublicClick}>{isClicked ? 'Private' : 'Public'}</button> */}
                     </div>
                 }
            
-            <button onClick={handleLeaveClick}>Leave Room</button> 
+            <button  onClick={handleLeaveClick} className="waiting-btn">Leave Room</button> 
             
             </div>
             </div>
