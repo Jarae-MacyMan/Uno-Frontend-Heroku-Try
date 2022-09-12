@@ -23,27 +23,32 @@ align-items: center;
     width: 430px; 
     color: white;
 }
+.game-control{
+    padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-.card{
-    width: 330px;
-    height: 350px;
-
-   
 }
-.map-name{
-display: flex;
-flex-direction: column; 
-
-align-items: center;
-color: black;
+.game-control p { 
+    padding-top: 10px;
+    color: white;
 }
-.id{
-    /* border-radius: 30px; */
-    background-color: white;
-     width:150px;
+.game-control-btn{
+background-color: white;
+width: 120px;
+height: 40px;
+ border: none;
+ border-radius: 25px;
 }
-.map-card{
-    padding-bottom: 70px;
+.game-control input{
+    border-radius: 25px;
+    height: 40px;
 }
 
+
+.join-btn{
+padding-right: 10px;
+}
 

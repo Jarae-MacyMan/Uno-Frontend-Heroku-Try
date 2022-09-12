@@ -12,8 +12,8 @@ const socket = io('http://localhost:3002')
 
 socket.on('init', handleInit)
 socket.on('gameCode', handleGameCode)
-socket.on('unknownGame', handleUnknownGame)
-socket.on('tooManyPlayers', handleTooManyPlayers)
+// socket.on('unknownGame', handleUnknownGame)
+// socket.on('tooManyPlayers', handleTooManyPlayers)
 
 
 
@@ -23,14 +23,14 @@ function reset(){
     playerNum = null 
    setGameCode('')
 }
-function handleUnknownGame(){
-    reset()
-alert('Unknown Game Code ')
-}
-function handleTooManyPlayers(){
-     reset()
-    alert('This game is full')
-}
+// function handleUnknownGame(){
+//     reset()
+// alert('Unknown Game Code ')
+// }
+// function handleTooManyPlayers(){
+//      reset()
+//     alert('This game is full')
+// }
 function handleInit(number){
   playerNum = number
 }

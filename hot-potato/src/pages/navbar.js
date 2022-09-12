@@ -5,7 +5,7 @@ import '../style/navbar.css'
 import Context from "../context/Context"
 
 function NavbarFunc(props){
-  console.log(`This is props: ${props}`)
+  // console.log(`This is props: ${props}`)
 
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
@@ -14,7 +14,7 @@ function NavbarFunc(props){
   return (
     <div>
       <Navbar className='navbar-container'>
-        <NavbarBrand className='nav-heading' href="/home">HOT POTATO </NavbarBrand>
+        <NavbarBrand className='nav-heading' href="/home">ESCAPE </NavbarBrand>
         <NavbarToggler onClick={toggle} />
           <NavbarText className='nav-name'>Welcome, {context.userInfo.playerInfo.username}</NavbarText> 
       </Navbar>
