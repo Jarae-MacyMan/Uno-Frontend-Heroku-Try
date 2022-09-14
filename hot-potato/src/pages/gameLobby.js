@@ -7,6 +7,12 @@ import { Button } from "reactstrap";
 import {CircularProgress} from '@mui/material'
 import "../style/gameLobby.css"
 
+import Game from './unoGame.js'
+
+
+
+
+
 function WaitingRoom (){
     let params = useParams();
     const navigate = useNavigate()
@@ -131,38 +137,42 @@ function WaitingRoom (){
     
     return(
         <div>
-            <NavbarFunc/>
-            <div className="header">
-            <h2>Waiting room </h2>
-            <p>Your game room code is: {game.room_code}</p>
-            {/* <div className="game-img" >
-
-                <img  src="https://cdna.artstation.com/p/assets/images/images/024/979/396/large/sarath-kumar-nyc-street-day.jpg?1584168680" />
-                <CircularProgress className="overlay" color="inherit" />
-            </div> */}
-            </div>
-            <div className="friends">
-            <h4>Players in the Lobby</h4>
-            <div>
-                {currentPlayerList.map((player) => {
-                    return <ol key={player.player_id}> <li>{player.username}</li></ol>
-                })}
-            </div>
-            <div className="game-btn">
-                {game.hosted_by === context.userInfo.playerInfo.username && 
-                    <div style={{paddingRight:'30px'}}>
-                        <button className="waiting-btn"
-                        >Start Game</button>
-                        {/* <button onClick={handleCloseClick}>Close</button> */}
-                        {/* <button onClick={handlePublicClick}>{isClicked ? 'Private' : 'Public'}</button> */}
-                    </div>
-                }
-           
-            <button  onClick={handleLeaveClick} className="waiting-btn">Leave Room</button> 
-            
-            </div>
-            </div>
+            < Game data={game}/>
         </div>
+    
+        // <div>
+        //     <NavbarFunc/>
+        //     <div className="header">
+        //     <h2>Waiting room </h2>
+        //     <p>Your game room code is: {game.room_code}</p>
+        //     {/* <div className="game-img" >
+
+        //         <img  src="https://cdna.artstation.com/p/assets/images/images/024/979/396/large/sarath-kumar-nyc-street-day.jpg?1584168680" />
+        //         <CircularProgress className="overlay" color="inherit" />
+        //     </div> */}
+        //     </div>
+        //     <div className="friends">
+        //     <h4>Players in the Lobby</h4>
+        //     <div>
+        //         {currentPlayerList.map((player) => {
+        //             return <ol key={player.player_id}> <li>{player.username}</li></ol>
+        //         })}
+        //     </div>
+        //     <div className="game-btn">
+        //         {game.hosted_by === context.userInfo.playerInfo.username && 
+        //             <div style={{paddingRight:'30px'}}>
+        //                 <button className="waiting-btn"
+        //                 >Start Game</button>
+        //                 {/* <button onClick={handleCloseClick}>Close</button> */}
+        //                 {/* <button onClick={handlePublicClick}>{isClicked ? 'Private' : 'Public'}</button> */}
+        //             </div>
+        //         }
+           
+        //     <button  onClick={handleLeaveClick} className="waiting-btn">Leave Room</button> 
+            
+        //     </div>
+        //     </div>
+        // </div>
     )
 }
 
