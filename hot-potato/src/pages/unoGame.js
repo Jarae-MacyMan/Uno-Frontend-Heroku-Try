@@ -18,7 +18,7 @@ import draw2CardSound from '../assets/sounds/draw2-sound.mp3'
 import wildCardSound from '../assets/sounds/wild-sound.mp3'
 import draw4CardSound from '../assets/sounds/draw4-sound.mp3'
 import gameOverSound from '../assets/sounds/game-over-sound.mp3'
-import { color } from '@mui/system'
+
 
 
 let socket
@@ -27,10 +27,7 @@ const ENDPOINT = 'http://localhost:3002'
 function Game (props) {
     const {search} = useLocation()
     const {roomCode} = queryString.parse(search)
-    //const navigate = useNavigate()
-    // console.log(roomCode)
-    
-    // const data = queryString.parse(props.location.search)
+   
 
     
     //initialize socket state

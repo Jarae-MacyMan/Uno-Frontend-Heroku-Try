@@ -1,12 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import Context from '../context/Context';
 import React from 'react';
-import {Button, Input, Label, FormGroup, Form} from 'reactstrap'
+import { Input, Label, FormGroup, Form} from 'reactstrap'
 import '../style/signup.css'
 
 
 function SignUp(){
-  const navigate = useNavigate()
+ 
   const [playerInfo, setPlayerInfo] = React.useState({})
 
    
@@ -46,7 +46,7 @@ function SignUp(){
    
 return (
   <div>
-    {/* <NavbarFunc user= {playerInfo}/> */}
+   
       <div className='form-container'>
         <body>
           <h2>Create a player</h2>

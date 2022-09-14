@@ -2,7 +2,7 @@ import NavbarFunc from "./navbar"
 import '../style/lobby.css'
 
 import React, { useContext, useEffect, useState } from 'react'
-import Context from "../context/Context"
+
 import MapCard from "../components/MapCard"
 
 

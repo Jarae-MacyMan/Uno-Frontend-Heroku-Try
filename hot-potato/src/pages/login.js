@@ -1,7 +1,7 @@
 import { Link, useNavigate} from 'react-router-dom';
 import Context from '../context/Context';
 import React from 'react';
-import {Button, Input, Label, FormGroup, Form} from 'reactstrap'
+import { Input, Label, FormGroup, Form} from 'reactstrap'
 import "../style/login.css"
 function Login(){
     const navigate = useNavigate();
@@ -9,7 +9,7 @@ function Login(){
     let   [attempts, updateAttempts] = React.useState(0);
     const [message, setMessage] = React.useState('')
     const context = React.useContext(Context);
-    console.log(context)
+ 
 
 
     const handleSubmit = (event) => {
