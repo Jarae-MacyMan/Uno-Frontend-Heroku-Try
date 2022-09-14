@@ -111,34 +111,22 @@ function MapCard(){
 
   return (
     <div>
-      {/* <div className='game-control'>
-      <div>
-    
-      <Link to={`/Game?roomCode=${generateCode()}`}>  <button className='game-control-btn' type='submit'> Create game</button></Link>
-    
-      </div>
-      <p>  OR</p>
-     
-      <div>
-        <input type='text' placeholder='enter room code' onChange={(event) => setGameRoomCode(event.target.value)} />
-        <Link to={`/Game?roomCode=${gameRoomCode}`}> <button  className='game-control-btn ' type='submit' >Join room</button></Link>
-</div>
-
- 
-      </div> */}
-      <div className='Homepage'>       
-                <div className='homepage-form'>
-                    <div className='homepage-join'>
-                        <TextField id="outlined-basic" label="Room Code"  type='text' placeholder='Game Code'  onChange={(event) => setGameRoomCode(event.target.value)} />
-                        <Link to={`/play?roomCode=${gameRoomCode}`}><button className="game-button green">JOIN GAME</button></Link>
-                    </div>
-                    <h1>OR</h1>
-                    <div className='homepage-create'>
-                        <Link to={`/play?roomCode=${generateCode()}`}><button className="game-button orange">CREATE GAME</button></Link>
+   
+      <div className='game-control'>   
+       <div >
+                        <Link to={`/play?roomCode=${generateCode()}`}><button className="game-control-btn">CREATE GAME</button></Link>
                     </div>
             
+
+                <p>OR</p>
+                    <div className='input-box'>
+                        <input id="outlined-basic" label="Room Code"  type='text' placeholder='Game Code'  onChange={(event) => setGameRoomCode(event.target.value)} />
+                        <Link to={`/play?roomCode=${gameRoomCode}`}><button className="game-control-btn">JOIN GAME</button></Link>
+                    </div>
+                   
+                   
             </div>
-        </div>
+        
 
     </div>
   )

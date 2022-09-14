@@ -23,6 +23,7 @@ align-items: center;
     width: 430px; 
     color: white;
 }
+
 .game-control{
     padding-top: 100px;
     display: flex;
@@ -37,7 +38,7 @@ align-items: center;
 }
 .game-control-btn{
 background-color: white;
-width: 120px;
+width: 130px;
 height: 40px;
  border: none;
  border-radius: 25px;

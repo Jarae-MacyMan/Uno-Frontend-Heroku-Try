@@ -16,7 +16,7 @@ function NavbarFunc(props){
       <Navbar className='navbar-container'>
         <img src={require('../assets/logo.png')} width='100px'/>
         <NavbarToggler onClick={toggle} />
-          <NavbarText className='nav-name'>Welcome</NavbarText> 
+          <NavbarText className='nav-name'>Welcome To UNO!</NavbarText> 
       </Navbar>
     </div>
   );
