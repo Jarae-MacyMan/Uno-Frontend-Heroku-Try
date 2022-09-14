@@ -60,7 +60,7 @@ function NavbarFunc(props){
               <li>Skip</li>
               <p>Opponent loses his/her turn and is "skipped".</p>
               <li>Wild</li>
-              <p>Change the color being played to any color (including the current color) </p>
+              <p>Change the color being played to any color (including the current color).</p> <p> *Tell your opponent what the color you choose in the chat!* </p>
 
             </ul>
           </Typography>
