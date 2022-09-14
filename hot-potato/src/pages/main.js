@@ -12,7 +12,7 @@ const Lobby = () =>{
        <NavbarFunc/>
       <div className="heading">
        <h2>WELCOME TO UNO</h2>
-        <p className="text"> Explore our map with friends while trying to beat the potato bomb. Dont get caught with the potato at the wrong time or else you will die. The last person standing is the potato king/queen!</p> 
+        <p className="text">Our uno game is a 2 player game for you and your friend to enjoy. Take some time out of your day to play this fun, yet very competitive game.</p> 
       </div>
       <MapCard/>
     </div>

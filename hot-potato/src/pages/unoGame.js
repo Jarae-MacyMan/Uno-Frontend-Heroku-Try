@@ -18,6 +18,7 @@ import draw2CardSound from '../assets/sounds/draw2-sound.mp3'
 import wildCardSound from '../assets/sounds/wild-sound.mp3'
 import draw4CardSound from '../assets/sounds/draw4-sound.mp3'
 import gameOverSound from '../assets/sounds/game-over-sound.mp3'
+import { color } from '@mui/system'
 
 
 let socket
@@ -1243,14 +1244,14 @@ return(
                     <img src={require('../assets/logo.png')} />
                     <h1>Game Code: {room}</h1>
                     <span>
-                        <button className='game-button green' onClick={() => setSoundMuted(!isSoundMuted)}>{isSoundMuted ? <span className="material-icons">volume_off</span> : <span className="material-icons">volume_up</span>}</button>
-                        <button className='game-button green' onClick={() => {
+                        <button className='game-button' onClick={() => setSoundMuted(!isSoundMuted)}>{isSoundMuted ? <span className="material-icons">volume off</span> : <span className="material-icons">volume on</span>}</button>
+                        <button className='game-button ' onClick={() => {
                             if(isMusicMuted)
                                 playBBgMusic()
                             else
                                 pause()
                             setMusicMuted(!isMusicMuted)
-                        }}>{isMusicMuted ? <span className="material-icons">music_off</span> : <span className="material-icons">music_note</span>}</button>
+                        }}>{isMusicMuted ? <span className="material-icons">music off</span> : <span className="material-icons">music on</span>}</button>
                     </span>
                 </div>
 
@@ -1260,7 +1261,7 @@ return(
 
                 {users.length===2 && <>
 
-                    {gameOver ? <div>{winner !== '' && <><h1>GAME OVER</h1><h2>{winner} wins!</h2></>}</div> :
+                    {gameOver ? <div>{winner !== '' && <><h1 style={{color: "white"}} >GAME OVER</h1><h2 style={{color: "white"}}>{winner} wins!</h2></>}</div> :
                     <div>
                         {/* PLAYER 1 VIEW */}
                         {currentUser === 'Player 1' && <>    
@@ -1284,7 +1285,7 @@ return(
                                 className='Card'
                                 src={require(`../assets/cards-front/${playedCardsPile[playedCardsPile.length-1]}.png`)}
                                 /> }
-                            <button className='game-button orange' disabled={player1Deck.length !== 2} onClick={() => {
+                            <button className='game-button' disabled={player1Deck.length !== 2} onClick={() => {
                                 setUnoButtonPressed(!isUnoButtonPressed)
                                 playUnoSound()
                             }}>UNO</button>
@@ -1307,8 +1308,8 @@ return(
                                 <div className="chat-head">
                                     <h2>Chat Box</h2>
                                     {!isChatBoxHidden ?
-                                    <span onClick={toggleChatBox} class="material-icons">keyboard_arrow_down</span> :
-                                    <span onClick={toggleChatBox} class="material-icons">keyboard_arrow_up</span>}
+                                    <span onClick={toggleChatBox} class="chat-control">close</span> :
+                                    <span onClick={toggleChatBox} class="chat-control">close</span>}
                                 </div>
                                 <div className="chat-body">
                                     <div className="msg-insert">
@@ -1348,7 +1349,7 @@ return(
                                 className='Card'
                                 src={require(`../assets/cards-front/${playedCardsPile[playedCardsPile.length-1]}.png`)}
                                 /> }
-                            <button className='game-button orange' disabled={player2Deck.length !== 2} onClick={() => {
+                            <button className='game-button' disabled={player2Deck.length !== 2} onClick={() => {
                                 setUnoButtonPressed(!isUnoButtonPressed)
                                 playUnoSound()
                             }}>UNO</button>
@@ -1371,8 +1372,8 @@ return(
                                 <div className="chat-head">
                                     <h2>Chat Box</h2>
                                     {!isChatBoxHidden ?
-                                    <span onClick={toggleChatBox} class="material-icons">keyboard_arrow_down</span> :
-                                    <span onClick={toggleChatBox} class="material-icons">keyboard_arrow_up</span>}
+                                    <span onClick={toggleChatBox} class="material-icons-chat">close</span> :
+                                    <span onClick={toggleChatBox} class="material-icons-chat">open</span>}
                                 </div>
                                 <div className="chat-body">
                                     <div className="msg-insert">
@@ -1391,10 +1392,10 @@ return(
                         </div> </> }
                     </div> }
                 </> }
-            </> : <h1>Room full</h1> }
+            </> : <h1 style={{color: "white"}}>Room full</h1> }
 
             <br />
-            <Link to= {"/home"}> <button  className="game-button red">QUIT</button></Link>
+            <Link to= {"/home"}> <button className="game-button quit-btn">QUIT</button></Link>
         </div>
 )
 }

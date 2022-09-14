@@ -72,8 +72,10 @@ function NavbarFunc(props){
           <img src={require('../assets/logo.png')} width='100px'/>
         </div>
         <NavbarToggler onClick={toggle} />
+
         <h2 variant="contained" className='nav-name'onClick={handleOpen}>How To Play</h2>
           {/* <NavbarText className='nav-name'> How To Play </NavbarText>  */}
+
       </Navbar>
     </div>
   );

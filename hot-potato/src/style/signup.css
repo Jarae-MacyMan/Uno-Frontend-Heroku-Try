@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe&display=swap');
 
 body{
-   background-image: url('https://wallpapers.com/images/hd/uno-card-red-poster-fahn507dk0y40lko.webp');
-   /* background-repeat: no-repeat; */
-  /* background-size: 1300px; */
+   background-image: url('https://images.unsplash.com/photo-1617783919130-c8566c8d3b7f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTN8fHVub3xlbnwwfHwwfHw%3D&w=1000&q=80');
+   background-repeat: no-repeat;
+  background-size: 100vw;
 }
 
 .form{

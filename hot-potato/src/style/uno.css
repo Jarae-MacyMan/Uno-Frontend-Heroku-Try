@@ -39,6 +39,9 @@ a {
   width: 150px;
   line-height: 1.5em;
 }
+.quit-btn{
+ padding-right: 100px;
+}
 
 /* Game.js parent div */
 .Game {
@@ -78,6 +81,7 @@ a {
   justify-content: space-between;
   padding: 0 60px;
   height: 100px;
+  color: white;
 }
 
 .topInfo>img {
@@ -95,6 +99,9 @@ a {
 .topInfoText {
   font-size: 2rem;
   margin: 0;
+  color: white;
+  padding-top:100px ;
+  text-align: center;
 }
 
 /* Player Decks */
@@ -131,6 +138,7 @@ a {
 .playerDeckText {
   font-size: 2rem;
   margin: 0 20px;
+  color: white;
 }
 
 /* Game.js Middle Row */
@@ -155,35 +163,40 @@ a {
   font-size: 15px;
   line-height: 1.5em;
   letter-spacing: .1em;
-  text-shadow: 2px 2px 1px #0066a2, -2px 2px 1px #0066a2, 2px -2px 1px #0066a2, -2px -2px 1px #0066a2, 0px 2px 1px #0066a2, 0px -2px 1px #0066a2, 0px 4px 1px #004a87, 2px 4px 1px #004a87, -2px 4px 1px  #004a87;
+  /* text-shadow: 2px 2px 1px #0066a2, -2px 2px 1px #0066a2, 2px -2px 1px #0066a2, -2px -2px 1px #0066a2, 0px 2px 1px #0066a2, 0px -2px 1px #0066a2, 0px 4px 1px #004a87, 2px 4px 1px #004a87, -2px 4px 1px  #004a87; */
   border: none;
   margin: 15px 15px 30px;
-  background: repeating-linear-gradient( 45deg, #3ebbf7, #3ebbf7 5px, #45b1f4 5px, #45b1f4 10px);
-  border-bottom: 3px solid rgba(16, 91, 146, 0.5);
+  background: white;
+  border-bottom: 3px solid red;
   border-top: 3px solid rgba(255,255,255,.3);
-  color: #fff !important;
+  color: rgb(9, 4, 4) !important;
   border-radius: 8px;
   padding: 8px 15px 10px;
-  box-shadow: 0 6px 0 #266b91, 0 8px 1px 1px rgba(0,0,0,.3), 0 10px 0 5px #12517d, 0 12px 0 5px #1a6b9a, 0 15px 0 5px #0c405e, 0 15px 1px 6px rgba(0,0,0,.3);
+  font-weight: bolder;
+  /* box-shadow: 0 6px 0 #266b91, 0 8px 1px 1px rgba(0,0,0,.3), 0 10px 0 5px #12517d, 0 12px 0 5px #1a6b9a, 0 15px 0 5px #0c405e, 0 15px 1px 6px rgba(0,0,0,.3); */
 }
 
 .game-button:hover {
   top:2px;
-  box-shadow: 0 4px 0 #266b91, 0 6px 1px 1px rgba(0,0,0,.3), 0 8px 0 5px #12517d, 0 10px 0 5px #1a6b9a, 0 13px 0 5px #0c405e, 0 13px 1px 6px rgba(0,0,0,.3);
+  /* box-shadow: 0 4px 0 #266b91, 0 6px 1px 1px rgba(0,0,0,.3), 0 8px 0 5px #12517d, 0 10px 0 5px #1a6b9a, 0 13px 0 5px #0c405e, 0 13px 1px 6px rgba(0,0,0,.3); */
+}
+.material-icons-chat{
+  padding-right: 50px;
+  color:white;
 }
 
-.game-button::before {
+/* .game-button::before {
   content: '';
   height: 10%;
   position: absolute;
   width: 40%;
-  background: #fff;
+  background: rgb(255, 255, 255);
   right: 13%;
   top: -3%;
   border-radius: 99px;
-  }
+  } */
 
-.game-button::after {
+/* .game-button::after {
   content: '';
   height: 10%;
   position: absolute;
@@ -192,8 +205,8 @@ a {
   right: 5%;
   top: -3%;
   border-radius: 99px;
-  }
-
+  } */
+/* 
 .game-button.orange {
   background: repeating-linear-gradient( 45deg, #ffc800, #ffc800 5px, #ffc200 5px, #ffc200 10px);
   box-shadow: 0 6px 0 #b76113, 0 8px 1px 1px rgba(0,0,0,.3), 0 10px 0 5px #75421f, 0 12px 0 5px #8a542b, 0 15px 0 5px #593116, 0 15px 1px 6px rgba(0,0,0,.3);
@@ -228,7 +241,7 @@ a {
 .game-button.green:hover {
   top:2px;
   box-shadow: 0 4px 0 #348628, 0 6px 1px 1px rgba(0,0,0,.3), 0 8px 0 5px #2a6d20, 0 10px 0 5px #39822e, 0 13px 0 5px #1d4c16, 0 13px 1px 6px rgba(0,0,0,.3);
-}
+} */
 
 /* Spinner */
 .loader,
